@@ -127,24 +127,9 @@ public class Prefs {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public static void setSimCreditoDisponivel(android.content.Context r3, int r4) {
-        /*
-            if (r4 == 0) goto L8
-            r0 = 1
-            if (r4 == r0) goto L8
-            r1 = 2
-            if (r4 != r1) goto L9
-        L8:
-            r0 = r4
-        L9:
-            android.content.SharedPreferences r1 = sp(r3)
-            android.content.SharedPreferences$Editor r1 = r1.edit()
-            java.lang.String r2 = "sim_credito_disponivel"
-            android.content.SharedPreferences$Editor r1 = r1.putInt(r2, r0)
-            r1.apply()
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.kreysam.autosistematransfer.Prefs.setSimCreditoDisponivel(android.content.Context, int):void");
+    public static void setSimCreditoDisponivel(Context ctx, int sim) {
+        sp(ctx).edit().putInt(KEY_SIM_CREDITO_DISPONIVEL, sim).apply();
+    }
     }
 
     public static double getSaldoCredito(Context ctx, int sim) {
