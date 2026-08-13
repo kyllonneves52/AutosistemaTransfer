@@ -1,0 +1,4 @@
+R.drawable.stat_sys_download_done
+R.id.webview
+R.layout.activity_main
+R.string.url_painel_sugestao
