@@ -32,8 +32,18 @@ jobs:
         with:
           gradle-version: '8.2'
 
-      - name: Compilar APK
-        run: gradle assembleDebug --stacktrace
+      - - name: Ver dependências Kotlin
+  run: |
+    gradle :app:dependencies --configuration debugRuntimeClasspath
+    gradle :app:dependencyInsight \
+      --dependency kotlin-stdlib-jdk7 \
+      --configuration debugRuntimeClasspath
+    gradle :app:dependencyInsight \
+      --dependency kotlin-stdlib-jdk8 \
+      --configuration debugRuntimeClasspath
+
+- name: Compilar APK
+  run: gradle assembleDebug --stacktrace
 
       - name: Guardar APK
         uses: actions/upload-artifact@v4
