@@ -1,175 +1,574 @@
 package com.kreysam.autosistematransfer;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-/* JADX INFO: loaded from: classes3.dex */
 public class TtsHelper {
+
     private static final String TAG = "TtsHelper";
+
     private static TextToSpeech tts;
     private static boolean pronto = false;
-    private static final Random random = new Random();
-    private static final String[] UNIDADES = {"zero", "um", "dois", "tres", "quatro", "cinco", "seis", "sete", "oito", "nove"};
-    private static final String[] DEZ_A_DEZANOVE = {"dez", "onze", "doze", "treze", "catorze", "quinze", "dezasseis", "dezassete", "dezoito", "dezanove"};
-    private static final String[] DEZENAS = {"", "", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"};
-    private static final String[] CENTENAS = {"", "cem", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"};
 
-    public static synchronized void iniciar(Context ctx) {
+    private static final Random random = new Random();
+
+    private static final String[] UNIDADES = {
+            "zero",
+            "um",
+            "dois",
+            "tres",
+            "quatro",
+            "cinco",
+            "seis",
+            "sete",
+            "oito",
+            "nove"
+    };
+
+    private static final String[] DEZ_A_DEZANOVE = {
+            "dez",
+            "onze",
+            "doze",
+            "treze",
+            "catorze",
+            "quinze",
+            "dezasseis",
+            "dezassete",
+            "dezoito",
+            "dezanove"
+    };
+
+    private static final String[] DEZENAS = {
+            "",
+            "",
+            "vinte",
+            "trinta",
+            "quarenta",
+            "cinquenta",
+            "sessenta",
+            "setenta",
+            "oitenta",
+            "noventa"
+    };
+
+    private static final String[] CENTENAS = {
+            "",
+            "cem",
+            "duzentos",
+            "trezentos",
+            "quatrocentos",
+            "quinhentos",
+            "seiscentos",
+            "setecentos",
+            "oitocentos",
+            "novecentos"
+    };
+
+    /**
+     * Inicializa o TextToSpeech.
+     */
+    public static synchronized void iniciar(Context context) {
+
+        if (context == null) {
+            Log.w(TAG, "Context nulo. Não foi possível iniciar TTS.");
+            return;
+        }
+
         if (tts != null) {
             return;
         }
-        tts = new TextToSpeech(ctx.getApplicationContext(), new TextToSpeech.OnInitListener() { // from class: com.kreysam.autosistematransfer.TtsHelper$$ExternalSyntheticLambda0
-            @Override // android.speech.tts.TextToSpeech.OnInitListener
-            public final void onInit(int i) {
-                TtsHelper.lambda$iniciar$0(i);
-            }
-        });
+
+        pronto = false;
+
+        final Context appContext = context.getApplicationContext();
+
+        tts = new TextToSpeech(
+                appContext,
+                new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+
+                        if (status != TextToSpeech.SUCCESS) {
+                            pronto = false;
+
+                            Log.w(
+                                    TAG,
+                                    "TTS falhou ao iniciar. status=" + status
+                            );
+
+                            return;
+                        }
+
+                        try {
+
+                            int resultado = tts.setLanguage(
+                                    new Locale("pt", "PT")
+                            );
+
+                            if (resultado == TextToSpeech.LANG_MISSING_DATA
+                                    || resultado == TextToSpeech.LANG_NOT_SUPPORTED) {
+
+                                Log.w(
+                                        TAG,
+                                        "Português de Portugal não disponível. Tentando idioma padrão."
+                                );
+
+                                resultado = tts.setLanguage(
+                                        Locale.getDefault()
+                                );
+                            }
+
+                            if (resultado == TextToSpeech.LANG_MISSING_DATA
+                                    || resultado == TextToSpeech.LANG_NOT_SUPPORTED) {
+
+                                pronto = false;
+
+                                Log.w(
+                                        TAG,
+                                        "Nenhum idioma compatível disponível para TTS."
+                                );
+
+                                return;
+                            }
+
+                            pronto = true;
+
+                            Log.i(
+                                    TAG,
+                                    "TTS pronto."
+                            );
+
+                        } catch (Exception e) {
+
+                            pronto = false;
+
+                            Log.e(
+                                    TAG,
+                                    "Erro ao configurar TTS.",
+                                    e
+                            );
+                        }
+                    }
+                }
+        );
     }
 
-    static /* synthetic */ void lambda$iniciar$0(int status) {
-        if (status != 0) {
-            Log.w(TAG, "TTS falhou ao iniciar (status=" + status + ")");
-            return;
-        }
-        int resultado = tts.setLanguage(new Locale("pt", "PT"));
-        if (resultado == -1 || resultado == -2) {
-            tts.setLanguage(Locale.getDefault());
-        }
-        pronto = true;
-        Log.i(TAG, "TTS pronto.");
-    }
-
+    /**
+     * Faz o aparelho falar o texto.
+     */
     public static synchronized void falar(String texto) {
-        if (!pronto || tts == null || texto == null || texto.isEmpty()) {
+
+        if (texto == null || texto.trim().isEmpty()) {
             return;
         }
-        try {
-            tts.speak(texto, 1, null, "autosistema_" + System.currentTimeMillis());
-        } catch (Exception e) {
-            Log.w(TAG, "Falha ao falar: " + e.getMessage());
-        }
-    }
 
-    public static synchronized void parar() {
+        if (tts == null || !pronto) {
+            Log.w(
+                    TAG,
+                    "TTS ainda não está pronto."
+            );
+            return;
+        }
+
         try {
-            TextToSpeech textToSpeech = tts;
-            if (textToSpeech != null) {
-                textToSpeech.stop();
+
+            if (android.os.Build.VERSION.SDK_INT >= 21) {
+
+                Bundle parametros = new Bundle();
+
+                tts.speak(
+                        texto,
+                        TextToSpeech.QUEUE_FLUSH,
+                        parametros,
+                        "autosistema_" + System.currentTimeMillis()
+                );
+
+            } else {
+
+                tts.speak(
+                        texto,
+                        TextToSpeech.QUEUE_FLUSH,
+                        null
+                );
             }
+
         } catch (Exception e) {
+
+            Log.e(
+                    TAG,
+                    "Falha ao falar.",
+                    e
+            );
         }
     }
 
-    public static synchronized void destruir() {
+    /**
+     * Para a fala atual.
+     */
+    public static synchronized void parar() {
+
         try {
-            TextToSpeech textToSpeech = tts;
-            if (textToSpeech != null) {
-                textToSpeech.stop();
+
+            if (tts != null) {
+                tts.stop();
+            }
+
+        } catch (Exception e) {
+
+            Log.w(
+                    TAG,
+                    "Erro ao parar TTS: " + e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Libera o TextToSpeech.
+     */
+    public static synchronized void destruir() {
+
+        try {
+
+            if (tts != null) {
+
+                tts.stop();
                 tts.shutdown();
             }
+
         } catch (Exception e) {
+
+            Log.w(
+                    TAG,
+                    "Erro ao destruir TTS: " + e.getMessage()
+            );
+
+        } finally {
+
+            tts = null;
+            pronto = false;
         }
-        tts = null;
-        pronto = false;
     }
 
+    /**
+     * Verifica se o TTS está pronto.
+     */
+    public static synchronized boolean estaPronto() {
+        return tts != null && pronto;
+    }
+
+    /**
+     * Converte um número de telefone em texto para fala.
+     *
+     * Exemplo:
+     * 841234567
+     *
+     * vira algo como:
+     * oito quatro, um dois três, quatro cinco, seis sete
+     */
     public static String numeroTelefonePorExtenso(String digitos) {
+
         if (digitos == null || digitos.isEmpty()) {
             return "";
         }
+
         StringBuilder frase = new StringBuilder();
-        String prefixo = digitos.length() >= 2 ? digitos.substring(0, 2) : digitos;
-        for (int i = 0; i < prefixo.length(); i++) {
-            if (i > 0) {
+
+        /*
+         * Remove caracteres que não sejam números.
+         */
+        StringBuilder somenteNumeros = new StringBuilder();
+
+        for (int i = 0; i < digitos.length(); i++) {
+
+            char c = digitos.charAt(i);
+
+            if (c >= '0' && c <= '9') {
+                somenteNumeros.append(c);
+            }
+        }
+
+        digitos = somenteNumeros.toString();
+
+        if (digitos.isEmpty()) {
+            return "";
+        }
+
+        /*
+         * Os dois primeiros dígitos são falados
+         * individualmente.
+         */
+        int prefixoTamanho = Math.min(2, digitos.length());
+
+        for (int i = 0; i < prefixoTamanho; i++) {
+
+            if (frase.length() > 0) {
                 frase.append(", ");
             }
-            frase.append(UNIDADES[prefixo.charAt(i) - '0']);
+
+            int numero = digitos.charAt(i) - '0';
+
+            frase.append(
+                    UNIDADES[numero]
+            );
         }
-        int i2 = digitos.length();
-        if (i2 > 2) {
+
+        /*
+         * O restante é dividido em grupos pequenos
+         * para deixar a fala mais natural.
+         */
+        if (digitos.length() > 2) {
+
             String resto = digitos.substring(2);
-            List<String> blocos = particionarAleatorio(resto.length());
-            int pos = 0;
+
+            List<String> blocos =
+                    particionarAleatorio(resto.length());
+
+            int posicao = 0;
+
             for (String bloco : blocos) {
+
                 int tamanho = bloco.length();
-                String grupo = resto.substring(pos, pos + tamanho);
-                pos += tamanho;
-                frase.append(", ").append(grupoPorExtenso(grupo));
+
+                if (posicao + tamanho > resto.length()) {
+                    tamanho = resto.length() - posicao;
+                }
+
+                if (tamanho <= 0) {
+                    break;
+                }
+
+                String grupo =
+                        resto.substring(
+                                posicao,
+                                posicao + tamanho
+                        );
+
+                posicao += tamanho;
+
+                String extenso =
+                        grupoPorExtenso(grupo);
+
+                if (!extenso.isEmpty()) {
+                    frase.append(", ");
+                    frase.append(extenso);
+                }
             }
         }
+
         return frase.toString();
     }
 
+    /**
+     * Divide os dígitos em blocos de 1 a 3 caracteres.
+     */
     private static List<String> particionarAleatorio(int totalDigitos) {
+
         List<String> blocos = new ArrayList<>();
+
         int restante = totalDigitos;
+
         while (restante > 0) {
-            int max = Math.min(3, restante);
-            int tamanho = random.nextInt(max) + 1;
-            if (restante - tamanho == 1 && tamanho < max) {
+
+            int max =
+                    Math.min(3, restante);
+
+            int tamanho =
+                    random.nextInt(max) + 1;
+
+            /*
+             * Evita deixar apenas um dígito
+             * isolado no final quando possível.
+             */
+            if (restante - tamanho == 1
+                    && tamanho < max) {
+
                 tamanho++;
             }
-            blocos.add(repete("X", tamanho));
+
+            blocos.add(
+                    repete("X", tamanho)
+            );
+
             restante -= tamanho;
         }
+
         return blocos;
     }
 
-    private static String repete(String s, int n) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            sb.append(s);
+    private static String repete(
+            String texto,
+            int quantidade
+    ) {
+
+        StringBuilder sb =
+                new StringBuilder();
+
+        for (int i = 0; i < quantidade; i++) {
+            sb.append(texto);
         }
+
         return sb.toString();
     }
 
+    /**
+     * Converte um grupo de 1 a 3 dígitos para texto.
+     */
     private static String grupoPorExtenso(String grupo) {
-        int n = Integer.parseInt(grupo);
-        switch (grupo.length()) {
-            case 1:
-                return UNIDADES[n];
-            case 2:
-                if (grupo.charAt(0) == '0') {
-                    StringBuilder sb = new StringBuilder();
-                    String[] strArr = UNIDADES;
-                    return sb.append(strArr[0]).append(" ").append(strArr[n]).toString();
-                }
-                return numeroExtenso2(n);
-            case 3:
-                if (grupo.charAt(0) == '0') {
-                    String doisDigitos = grupo.substring(1);
-                    return UNIDADES[0] + " " + grupoPorExtenso(doisDigitos);
-                }
-                return numeroExtenso3(n);
-            default:
+
+        if (grupo == null || grupo.isEmpty()) {
+            return "";
+        }
+
+        /*
+         * Garante que o grupo possui apenas números.
+         */
+        for (int i = 0; i < grupo.length(); i++) {
+
+            char c = grupo.charAt(i);
+
+            if (c < '0' || c > '9') {
                 return grupo;
+            }
+        }
+
+        try {
+
+            int numero =
+                    Integer.parseInt(grupo);
+
+            switch (grupo.length()) {
+
+                case 1:
+
+                    return UNIDADES[numero];
+
+                case 2:
+
+                    /*
+                     * Exemplo:
+                     * 05 -> zero cinco
+                     */
+                    if (grupo.charAt(0) == '0') {
+
+                        return UNIDADES[0]
+                                + " "
+                                + UNIDADES[
+                                grupo.charAt(1) - '0'
+                        ];
+                    }
+
+                    return numeroExtenso2(numero);
+
+                case 3:
+
+                    /*
+                     * Exemplo:
+                     * 005 -> zero cinco
+                     */
+                    if (grupo.charAt(0) == '0') {
+
+                        String doisDigitos =
+                                grupo.substring(1);
+
+                        return UNIDADES[0]
+                                + " "
+                                + grupoPorExtenso(
+                                doisDigitos
+                        );
+                    }
+
+                    return numeroExtenso3(numero);
+
+                default:
+
+                    return grupo;
+            }
+
+        } catch (Exception e) {
+
+            Log.w(
+                    TAG,
+                    "Erro ao converter grupo: " + grupo
+            );
+
+            return grupo;
         }
     }
 
-    private static String numeroExtenso2(int n) {
-        if (n < 10) {
-            return UNIDADES[n];
+    /**
+     * Converte números de 0 a 99.
+     */
+    private static String numeroExtenso2(int numero) {
+
+        if (numero < 0 || numero > 99) {
+            return String.valueOf(numero);
         }
-        if (n < 20) {
-            return DEZ_A_DEZANOVE[n - 10];
+
+        if (numero < 10) {
+            return UNIDADES[numero];
         }
-        int dezena = n / 10;
-        int unidade = n % 10;
-        return unidade == 0 ? DEZENAS[dezena] : DEZENAS[dezena] + " e " + UNIDADES[unidade];
+
+        if (numero < 20) {
+            return DEZ_A_DEZANOVE[
+                    numero - 10
+            ];
+        }
+
+        int dezena =
+                numero / 10;
+
+        int unidade =
+                numero % 10;
+
+        if (unidade == 0) {
+            return DEZENAS[dezena];
+        }
+
+        return DEZENAS[dezena]
+                + " e "
+                + UNIDADES[unidade];
     }
 
-    private static String numeroExtenso3(int n) {
-        if (n < 100) {
-            return numeroExtenso2(n);
+    /**
+     * Converte números de 0 a 999.
+     */
+    private static String numeroExtenso3(int numero) {
+
+        if (numero < 0 || numero > 999) {
+            return String.valueOf(numero);
         }
-        int centena = n / 100;
-        int resto = n % 100;
-        String base = centena == 1 ? "cem" : CENTENAS[centena];
-        return resto == 0 ? base : base + " e " + numeroExtenso2(resto);
+
+        if (numero < 100) {
+            return numeroExtenso2(numero);
+        }
+
+        int centena =
+                numero / 100;
+
+        int resto =
+                numero % 100;
+
+        String base;
+
+        if (centena == 1) {
+            base = "cem";
+        } else {
+            base = CENTENAS[centena];
+        }
+
+        if (resto == 0) {
+            return base;
+        }
+
+        return base
+                + " e "
+                + numeroExtenso2(resto);
     }
 }
