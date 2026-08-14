@@ -1336,6 +1336,7 @@ public class UssdTransferManager {
                                                                                 quantidadeMB,
                                                                                 numero,
                                                                                 sim,
+                                                                                callback,
                                                                                 tentativaMmi + 1,
                                                                                 motivoSimAnterior
                                                                         );

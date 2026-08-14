@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
 import android.webkit.JavascriptInterface;
-import com.kreysam.autosistematransfer.ApiClient;
-import java.util.Objects;
+
 import org.json.JSONObject;
 
-/* JADX INFO: loaded from: classes3.dex */
 public class WebAppInterface {
+
     private final MainActivity activity;
 
     public WebAppInterface(MainActivity activity) {
@@ -18,70 +17,80 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public String getUrlPainel() {
-        return Prefs.getUrlPainel(this.activity);
+        return Prefs.getUrlPainel(activity);
     }
 
     @JavascriptInterface
     public void saveUrlPainel(String url) {
-        Prefs.setUrlPainel(this.activity, url);
+        Prefs.setUrlPainel(activity, url);
     }
 
     @JavascriptInterface
     public String getAndroidId() {
-        return ApiClient.obterAndroidId(this.activity);
+        return ApiClient.obterAndroidId(activity);
     }
 
     @JavascriptInterface
     public String getStatusDispositivo() {
-        return Prefs.getStatusDispositivo(this.activity);
-    }
-
-    static /* synthetic */ void lambda$registarDispositivo$0(boolean ok, String msg) {
+        return Prefs.getStatusDispositivo(activity);
     }
 
     @JavascriptInterface
     public void registarDispositivo() {
-        ApiClient.registarDispositivo(this.activity, new ApiClient.Callback() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda1
-            @Override // com.kreysam.autosistematransfer.ApiClient.Callback
-            public final void onResultado(boolean z, String str) {
-                WebAppInterface.lambda$registarDispositivo$0(z, str);
-            }
-        });
-    }
-
-    static /* synthetic */ void lambda$verificarStatusDispositivo$1(boolean ok, String msg) {
+        ApiClient.registarDispositivo(
+                activity,
+                new ApiClient.Callback() {
+                    @Override
+                    public void onResultado(
+                            boolean ok,
+                            String msg
+                    ) {
+                        // Resultado tratado pelo ApiClient/painel.
+                    }
+                }
+        );
     }
 
     @JavascriptInterface
     public void verificarStatusDispositivo() {
-        ApiClient.verificarStatusDispositivo(this.activity, new ApiClient.Callback() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda10
-            @Override // com.kreysam.autosistematransfer.ApiClient.Callback
-            public final void onResultado(boolean z, String str) {
-                WebAppInterface.lambda$verificarStatusDispositivo$1(z, str);
-            }
-        });
+        ApiClient.verificarStatusDispositivo(
+                activity,
+                new ApiClient.Callback() {
+                    @Override
+                    public void onResultado(
+                            boolean ok,
+                            String msg
+                    ) {
+                        // Resultado tratado pelo ApiClient/painel.
+                    }
+                }
+        );
     }
 
     @JavascriptInterface
     public boolean getComunicacaoAtiva() {
-        return Prefs.getComunicacaoAtiva(this.activity);
+        return Prefs.getComunicacaoAtiva(activity);
     }
 
     @JavascriptInterface
     public void setComunicacaoAtiva(boolean ativa) {
-        Prefs.setComunicacaoAtiva(this.activity, ativa);
-        ApiClient.enviarHeartbeat(this.activity);
+        Prefs.setComunicacaoAtiva(activity, ativa);
+        ApiClient.enviarHeartbeat(activity);
     }
 
     @JavascriptInterface
     public int getSimCreditoDisponivel() {
-        return Prefs.getSimCreditoDisponivel(this.activity);
+        return Prefs.getSimCreditoDisponivel(activity);
     }
 
     @JavascriptInterface
     public void setSimCreditoDisponivel(int simOuZero) {
-        Prefs.setSimCreditoDisponivel(this.activity, simOuZero);
-        ApiClient.enviarHeartbeat(this.activity);
+        Prefs.setSimCreditoDisponivel(
+                activity,
+                simOuZero
+        );
+
+        ApiClient.enviarHeartbeat(activity);
     }
 
     @JavascriptInterface
@@ -91,120 +100,211 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void abrirConfigAcessibilidade() {
-        final MainActivity mainActivity = this.activity;
-        Objects.requireNonNull(mainActivity);
-        mainActivity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda2
-            @Override // java.lang.Runnable
-            public final void run() {
-                mainActivity.abrirConfigAcessibilidade();
-            }
-        });
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.abrirConfigAcessibilidade();
+                    }
+                }
+        );
     }
 
-    /* JADX INFO: renamed from: lambda$transferirManual$2$com-kreysam-autosistematransfer-WebAppInterface, reason: not valid java name */
-    /* synthetic */ void m57x391410c9(int quantidadeMB, String numero) {
-        this.activity.iniciarTransferenciaManual(quantidadeMB, numero);
+    // =========================================================
+    // TRANSFERÊNCIA MANUAL
+    // =========================================================
+
+    @JavascriptInterface
+    public void transferirManual(
+            final int quantidadeMB,
+            final String numero
+    ) {
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.iniciarTransferenciaManual(
+                                quantidadeMB,
+                                numero
+                        );
+                    }
+                }
+        );
+    }
+
+    // =========================================================
+    // CONSULTAR SALDO MB
+    // =========================================================
+
+    @JavascriptInterface
+    public void consultarSaldo(
+            final int sim
+    ) {
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.consultarSaldoSim(sim);
+                    }
+                }
+        );
+    }
+
+    // =========================================================
+    // TRANSFERÊNCIA DE CRÉDITO
+    // =========================================================
+
+    @JavascriptInterface
+    public void transferirCreditoManual(
+            final String valorMT,
+            final String numero
+    ) {
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.iniciarTransferenciaCreditoManual(
+                                valorMT,
+                                numero
+                        );
+                    }
+                }
+        );
+    }
+
+    // =========================================================
+    // CONSULTAR SALDO DE CRÉDITO
+    // =========================================================
+
+    @JavascriptInterface
+    public void consultarSaldoCredito(
+            final int sim
+    ) {
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.consultarSaldoCreditoSim(sim);
+                    }
+                }
+        );
+    }
+
+    // =========================================================
+    // TRANSFERÊNCIAS RESTANTES
+    // =========================================================
+
+    @JavascriptInterface
+    public void ajustarRestantes(
+            int sim,
+            int delta
+    ) {
+        Prefs.ajustarRestantes(
+                activity,
+                sim,
+                delta
+        );
     }
 
     @JavascriptInterface
-    public void transferirManual(final int quantidadeMB, final String numero) {
-        this.activity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda4
-            @Override // java.lang.Runnable
-            public final void run() {
-                this.f$0.m57x391410c9(quantidadeMB, numero);
-            }
-        });
+    public void resetarTransferencias(
+            int sim
+    ) {
+        Prefs.resetarTransferencias(
+                activity,
+                sim
+        );
     }
+
+    // =========================================================
+    // NÚMERO FIXO
+    // =========================================================
 
     @JavascriptInterface
-    public void consultarSaldo(final int sim) {
-        this.activity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda3
-            @Override // java.lang.Runnable
-            public final void run() {
-                this.f$0.m54x3e65881c(sim);
-            }
-        });
-    }
+    public boolean setNumeroFixo(
+            int sim,
+            String numero
+    ) {
 
-    /* JADX INFO: renamed from: lambda$consultarSaldo$3$com-kreysam-autosistematransfer-WebAppInterface, reason: not valid java name */
-    /* synthetic */ void m54x3e65881c(int sim) {
-        this.activity.consultarSaldoSim(sim);
-    }
+        if (numero == null ||
+                numero.trim().isEmpty()) {
 
-    /* JADX INFO: renamed from: lambda$transferirCreditoManual$4$com-kreysam-autosistematransfer-WebAppInterface, reason: not valid java name */
-    /* synthetic */ void m56x234dd17f(String valorMT, String numero) {
-        this.activity.iniciarTransferenciaCreditoManual(valorMT, numero);
-    }
+            Prefs.setNumeroFixo(
+                    activity,
+                    sim,
+                    ""
+            );
 
-    @JavascriptInterface
-    public void transferirCreditoManual(final String valorMT, final String numero) {
-        this.activity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda6
-            @Override // java.lang.Runnable
-            public final void run() {
-                this.f$0.m56x234dd17f(valorMT, numero);
-            }
-        });
-    }
-
-    @JavascriptInterface
-    public void consultarSaldoCredito(final int sim) {
-        this.activity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda8
-            @Override // java.lang.Runnable
-            public final void run() {
-                this.f$0.m55xa66a62e2(sim);
-            }
-        });
-    }
-
-    /* JADX INFO: renamed from: lambda$consultarSaldoCredito$5$com-kreysam-autosistematransfer-WebAppInterface, reason: not valid java name */
-    /* synthetic */ void m55xa66a62e2(int sim) {
-        this.activity.consultarSaldoCreditoSim(sim);
-    }
-
-    @JavascriptInterface
-    public void ajustarRestantes(int sim, int delta) {
-        Prefs.ajustarRestantes(this.activity, sim, delta);
-    }
-
-    @JavascriptInterface
-    public void resetarTransferencias(int sim) {
-        Prefs.resetarTransferencias(this.activity, sim);
-    }
-
-    @JavascriptInterface
-    public boolean setNumeroFixo(int sim, String numero) {
-        if (numero == null || numero.trim().isEmpty()) {
-            Prefs.setNumeroFixo(this.activity, sim, "");
             return true;
         }
-        String limpo = numero.trim().replaceAll("[^0-9]", "");
+
+        String limpo =
+                numero
+                        .trim()
+                        .replaceAll(
+                                "[^0-9]",
+                                ""
+                        );
+
         if (limpo.length() != 9) {
             return false;
         }
-        if (limpo.startsWith("84") || limpo.startsWith("85")) {
-            Prefs.setNumeroFixo(this.activity, sim, limpo);
+
+        if (limpo.startsWith("84") ||
+                limpo.startsWith("85")) {
+
+            Prefs.setNumeroFixo(
+                    activity,
+                    sim,
+                    limpo
+            );
+
             return true;
         }
+
         return false;
     }
 
     @JavascriptInterface
-    public String getNumeroFixo(int sim) {
-        return Prefs.getNumeroFixo(this.activity, sim);
+    public String getNumeroFixo(
+            int sim
+    ) {
+        return Prefs.getNumeroFixo(
+                activity,
+                sim
+        );
     }
+
+    // =========================================================
+    // OVERLAY
+    // =========================================================
 
     @JavascriptInterface
     public boolean temPermissaoOverlay() {
-        return Settings.canDrawOverlays(this.activity);
+        return Settings.canDrawOverlays(activity);
     }
 
     @JavascriptInterface
     public void pedirPermissaoOverlay() {
-        if (!Settings.canDrawOverlays(this.activity)) {
-            Intent intent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + this.activity.getPackageName()));
-            this.activity.startActivity(intent);
+
+        if (!Settings.canDrawOverlays(activity)) {
+
+            Intent intent =
+                    new Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse(
+                                    "package:" +
+                                    activity.getPackageName()
+                            )
+                    );
+
+            activity.startActivity(intent);
         }
     }
+
+    // =========================================================
+    // BLOQUEIO DE TOQUE
+    // =========================================================
 
     @JavascriptInterface
     public boolean getBloqueioActivo() {
@@ -213,8 +313,9 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void activarBloqueio() {
+
         if (temPermissaoOverlay()) {
-            GhostTouchBlocker.activar(this.activity);
+            GhostTouchBlocker.activar(activity);
         } else {
             pedirPermissaoOverlay();
         }
@@ -225,116 +326,285 @@ public class WebAppInterface {
         GhostTouchBlocker.desactivar();
     }
 
+    // =========================================================
+    // ÚLTIMA TRANSFERÊNCIA
+    // =========================================================
+
     @JavascriptInterface
-    public void transferirUltimaAgora(int sim) {
-        String numeroFixo = Prefs.getNumeroFixo(this.activity, sim);
-        if (numeroFixo == null || numeroFixo.isEmpty()) {
+    public void transferirUltimaAgora(
+            int sim
+    ) {
+
+        String numeroFixo =
+                Prefs.getNumeroFixo(
+                        activity,
+                        sim
+                );
+
+        if (numeroFixo == null ||
+                numeroFixo.isEmpty()) {
             return;
         }
-        UssdTransferManager.transferirUltimaAgora(this.activity, sim, numeroFixo);
+
+        UssdTransferManager.transferirUltimaAgora(
+                activity,
+                sim,
+                numeroFixo
+        );
     }
+
+    // =========================================================
+    // TOKEN
+    // =========================================================
 
     @JavascriptInterface
     public String getToken() {
-        return Prefs.getToken(this.activity);
+        return Prefs.getToken(activity);
     }
 
     @JavascriptInterface
-    public void saveToken(String token) {
-        Prefs.setToken(this.activity, token);
+    public void saveToken(
+            String token
+    ) {
+        Prefs.setToken(
+                activity,
+                token
+        );
     }
+
+    // =========================================================
+    // STATUS
+    // =========================================================
 
     @JavascriptInterface
     public String getStatus() {
+
         try {
-            JSONObject o = new JSONObject();
-            o.put("totalEnviados", Prefs.getTotalEnviados(this.activity));
-            o.put("ultimoEnvio", Prefs.getUltimoEnvio(this.activity));
-            o.put("ultimoErro", Prefs.getUltimoErro(this.activity));
-            o.put("temToken", !Prefs.getToken(this.activity).isEmpty());
-            o.put("temUrl", Prefs.getUrlPainel(this.activity).isEmpty() ? false : true);
-            o.put("statusDispositivo", Prefs.getStatusDispositivo(this.activity));
-            o.put("ultimaVerificacaoFalhou", Prefs.getUltimaVerificacaoFalhou(this.activity));
-            o.put("bateriaIgnorada", this.activity.bateriaOtimizacaoIgnorada());
-            o.put("deviceAdminAtivo", this.activity.deviceAdminAtivo());
-            o.put("saldoSim1", Prefs.getSaldo(this.activity, 1));
-            o.put("saldoSim2", Prefs.getSaldo(this.activity, 2));
-            o.put("saldoSim1Ts", Prefs.getSaldoTimestamp(this.activity, 1));
-            o.put("saldoSim2Ts", Prefs.getSaldoTimestamp(this.activity, 2));
-            o.put("transferenciasRestantesSim1", Prefs.getTransferenciasRestantes(this.activity, 1));
-            o.put("transferenciasRestantesSim2", Prefs.getTransferenciasRestantes(this.activity, 2));
-            o.put("transferenciasUsadasSim1", Prefs.getTransferenciasUsadasHoje(this.activity, 1));
-            o.put("transferenciasUsadasSim2", Prefs.getTransferenciasUsadasHoje(this.activity, 2));
-            o.put("maxTransferenciasDia", 10);
-            o.put("numeroFixoSim1", Prefs.getNumeroFixo(this.activity, 1));
-            o.put("numeroFixoSim2", Prefs.getNumeroFixo(this.activity, 2));
-            o.put("simCreditoDisponivel", Prefs.getSimCreditoDisponivel(this.activity));
+
+            JSONObject o =
+                    new JSONObject();
+
+            o.put(
+                    "totalEnviados",
+                    Prefs.getTotalEnviados(activity)
+            );
+
+            o.put(
+                    "ultimoEnvio",
+                    Prefs.getUltimoEnvio(activity)
+            );
+
+            o.put(
+                    "ultimoErro",
+                    Prefs.getUltimoErro(activity)
+            );
+
+            String token =
+                    Prefs.getToken(activity);
+
+            o.put(
+                    "temToken",
+                    token != null &&
+                    !token.isEmpty()
+            );
+
+            String url =
+                    Prefs.getUrlPainel(activity);
+
+            o.put(
+                    "temUrl",
+                    url != null &&
+                    !url.isEmpty()
+            );
+
+            o.put(
+                    "statusDispositivo",
+                    Prefs.getStatusDispositivo(activity)
+            );
+
+            o.put(
+                    "ultimaVerificacaoFalhou",
+                    Prefs.getUltimaVerificacaoFalhou(activity)
+            );
+
+            o.put(
+                    "bateriaIgnorada",
+                    activity.bateriaOtimizacaoIgnorada()
+            );
+
+            o.put(
+                    "deviceAdminAtivo",
+                    activity.deviceAdminAtivo()
+            );
+
+            o.put(
+                    "saldoSim1",
+                    Prefs.getSaldo(activity, 1)
+            );
+
+            o.put(
+                    "saldoSim2",
+                    Prefs.getSaldo(activity, 2)
+            );
+
+            o.put(
+                    "saldoSim1Ts",
+                    Prefs.getSaldoTimestamp(activity, 1)
+            );
+
+            o.put(
+                    "saldoSim2Ts",
+                    Prefs.getSaldoTimestamp(activity, 2)
+            );
+
+            o.put(
+                    "transferenciasRestantesSim1",
+                    Prefs.getTransferenciasRestantes(
+                            activity,
+                            1
+                    )
+            );
+
+            o.put(
+                    "transferenciasRestantesSim2",
+                    Prefs.getTransferenciasRestantes(
+                            activity,
+                            2
+                    )
+            );
+
+            o.put(
+                    "transferenciasUsadasSim1",
+                    Prefs.getTransferenciasUsadasHoje(
+                            activity,
+                            1
+                    )
+            );
+
+            o.put(
+                    "transferenciasUsadasSim2",
+                    Prefs.getTransferenciasUsadasHoje(
+                            activity,
+                            2
+                    )
+            );
+
+            o.put(
+                    "maxTransferenciasDia",
+                    10
+            );
+
+            o.put(
+                    "numeroFixoSim1",
+                    Prefs.getNumeroFixo(
+                            activity,
+                            1
+                    )
+            );
+
+            o.put(
+                    "numeroFixoSim2",
+                    Prefs.getNumeroFixo(
+                            activity,
+                            2
+                    )
+            );
+
+            o.put(
+                    "simCreditoDisponivel",
+                    Prefs.getSimCreditoDisponivel(
+                            activity
+                    )
+            );
+
             return o.toString();
+
         } catch (Exception e) {
+
             return "{}";
         }
     }
 
+    // =========================================================
+    // PERMISSÃO DE CHAMADAS
+    // =========================================================
+
     @JavascriptInterface
     public boolean temPermissaoChamadas() {
-        return this.activity.temPermissaoChamadas();
+        return activity.temPermissaoChamadas();
     }
 
     @JavascriptInterface
     public void pedirPermissoesChamadas() {
-        final MainActivity mainActivity = this.activity;
-        Objects.requireNonNull(mainActivity);
-        mainActivity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda7
-            @Override // java.lang.Runnable
-            public final void run() {
-                mainActivity.pedirPermissoesChamadas();
-            }
-        });
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.pedirPermissoesChamadas();
+                    }
+                }
+        );
     }
+
+    // =========================================================
+    // CONFIGURAÇÃO DE BATERIA
+    // =========================================================
 
     @JavascriptInterface
     public void abrirConfigBateria() {
-        final MainActivity mainActivity = this.activity;
-        Objects.requireNonNull(mainActivity);
-        mainActivity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda9
-            @Override // java.lang.Runnable
-            public final void run() {
-                mainActivity.abrirConfigBateria();
-            }
-        });
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.abrirConfigBateria();
+                    }
+                }
+        );
     }
+
+    // =========================================================
+    // DEVICE ADMIN
+    // =========================================================
 
     @JavascriptInterface
     public void abrirConfigDeviceAdmin() {
-        final MainActivity mainActivity = this.activity;
-        Objects.requireNonNull(mainActivity);
-        mainActivity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda5
-            @Override // java.lang.Runnable
-            public final void run() {
-                mainActivity.abrirConfigDeviceAdmin();
-            }
-        });
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.abrirConfigDeviceAdmin();
+                    }
+                }
+        );
     }
+
+    // =========================================================
+    // SERVIÇO
+    // =========================================================
 
     @JavascriptInterface
     public void iniciarServico() {
-        final MainActivity mainActivity = this.activity;
-        Objects.requireNonNull(mainActivity);
-        mainActivity.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.WebAppInterface$$ExternalSyntheticLambda0
-            @Override // java.lang.Runnable
-            public final void run() {
-                mainActivity.iniciarMonitorService();
-            }
-        });
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.iniciarMonitorService();
+                    }
+                }
+        );
     }
+
+    // =========================================================
+    // LOG
+    // =========================================================
 
     @JavascriptInterface
     public String lerLog() {
-        return AppLog.ler(this.activity);
+        return AppLog.ler(activity);
     }
 
     @JavascriptInterface
     public void limparLog() {
-        AppLog.limpar(this.activity);
+        AppLog.limpar(activity);
     }
 }
