@@ -70,55 +70,6 @@ public class UssdTransferManager {
     }
 
     // =========================================================
-    // LICENÇA
-    // =========================================================
-
-    private static boolean verificarLicenca(
-            Context ctx,
-            ErroSimples callback
-    ) {
-        try {
-
-            if (!LicenseManager.estaAtivado(ctx)) {
-
-                String mensagem =
-                        "Licença expirada ou não ativada. " +
-                        "Ative o aplicativo para continuar.";
-
-                AppLog.add(
-                        ctx,
-                        TAG,
-                        "Operação bloqueada: licença não ativa."
-                );
-
-                if (callback != null) {
-                    callback.onErro(mensagem);
-                }
-
-                return false;
-            }
-
-            return true;
-
-        } catch (Exception e) {
-
-            Log.e(
-                    TAG,
-                    "Erro ao verificar licença: " + e.getMessage(),
-                    e
-            );
-
-            if (callback != null) {
-                callback.onErro(
-                        "Não foi possível verificar a licença."
-                );
-            }
-
-            return false;
-        }
-    }
-
-    // =========================================================
     // TRANSFERÊNCIA DE MB
     // =========================================================
 
@@ -130,15 +81,6 @@ public class UssdTransferManager {
     ) {
 
         Objects.requireNonNull(callback);
-
-        if (!verificarLicenca(ctx, new ErroSimples() {
-            @Override
-            public void onErro(String mensagem) {
-                callback.onErro(mensagem);
-            }
-        })) {
-            return;
-        }
 
         String numeroLimpo = limparNumero(numero);
 
@@ -354,29 +296,6 @@ public class UssdTransferManager {
             String numeroFixo
     ) {
 
-        if (!verificarLicenca(
-                ctx,
-                new ErroSimples() {
-                    @Override
-                    public void onErro(String mensagem) {
-
-                        TtsHelper.falar(
-                                "Nao foi possivel iniciar. " +
-                                mensagem
-                        );
-
-                        AppLog.add(
-                                ctx,
-                                TAG,
-                                "transferirUltimaAgora bloqueada: " +
-                                mensagem
-                        );
-                    }
-                }
-        )) {
-            return;
-        }
-
         if (!temPermissoesENecessario(
                 ctx,
                 new ErroSimples() {
@@ -448,19 +367,6 @@ public class UssdTransferManager {
             final int sim,
             final int tentativa
     ) {
-
-        if (!LicenseManager.estaAtivado(ctx)) {
-
-            TelaHelper.desligar();
-
-            AppLog.add(
-                    ctx,
-                    TAG,
-                    "Ultima transferencia bloqueada: licença expirada."
-            );
-
-            return;
-        }
 
         if (!simEhVodacom(ctx, sim)) {
 
@@ -800,21 +706,6 @@ public class UssdTransferManager {
 
         Objects.requireNonNull(callback);
 
-        if (!verificarLicenca(
-                ctx,
-                new ErroSimples() {
-                    @Override
-                    public void onErro(String mensagem) {
-                        callback.onErro(
-                                sim,
-                                mensagem
-                        );
-                    }
-                }
-        )) {
-            return;
-        }
-
         if (!temPermissoesENecessario(
                 ctx,
                 new ErroSimples() {
@@ -943,8 +834,8 @@ public class UssdTransferManager {
 
                                                 callback.onErro(
                                                         sim,
-                                                        "Limite diário de 10 " +
-                                                        "transferências já atingido " +
+                                                        "Limite diario de 10 " +
+                                                        "transferencias ja atingido " +
                                                         "neste SIM."
                                                 );
                                             }
@@ -962,8 +853,8 @@ public class UssdTransferManager {
 
                                                     callback.onErro(
                                                             sim,
-                                                            "Código MMI inválido " +
-                                                            "— tenta consultar de novo."
+                                                            "Codigo MMI invalido " +
+                                                            "-- tenta consultar de novo."
                                                     );
 
                                                 } else {
@@ -997,7 +888,7 @@ public class UssdTransferManager {
         ) != 0) {
 
             onErro.onErro(
-                    "Falta permissão CALL_PHONE — " +
+                    "Falta permissao CALL_PHONE -- " +
                     "toca em 'Permitir chamadas (USSD)' " +
                     "e aceita o popup do sistema."
             );
@@ -1008,8 +899,8 @@ public class UssdTransferManager {
         if (!UssdAccessibilityService.estaAtivo()) {
 
             onErro.onErro(
-                    "Serviço de acessibilidade não está ativo. " +
-                    "Ativa em Definições > Acessibilidade > " +
+                    "Servico de acessibilidade nao esta ativo. " +
+                    "Ativa em Definicoes > Acessibilidade > " +
                     "Autosistema Transfer."
             );
 
@@ -1052,15 +943,6 @@ public class UssdTransferManager {
             final int tentativaMmi,
             final String motivoSimAnterior
     ) {
-
-        if (!LicenseManager.estaAtivado(ctx)) {
-
-            callback.onErro(
-                    "Licença expirada ou não ativada."
-            );
-
-            return;
-        }
 
         final int outroSim =
                 3 - sim;
@@ -1392,8 +1274,8 @@ public class UssdTransferManager {
                                                         TAG,
                                                         "SIM " +
                                                         sim +
-                                                        " confirmou limite diário " +
-                                                        "atingido — contador local " +
+                                                        " confirmou limite diario " +
+                                                        "atingido -- contador local " +
                                                         "sincronizado."
                                                 );
 
@@ -1474,11 +1356,7 @@ public class UssdTransferManager {
 
                                                     Log.w(
                                                             TAG,
-                                                            "SIM " +
-                                                            sim +
-                                                            " — MMI inválido " +
-                                                            (tentativaMmi + 1) +
-                                                            "x seguidas, desistindo."
+                                                            meuMotivo
                                                     );
 
                                                     callback.onErro(
@@ -1547,17 +1425,6 @@ public class UssdTransferManager {
 
                                                     return;
                                                 }
-
-                                                Log.w(
-                                                        TAG,
-                                                        "SIM " +
-                                                        sim +
-                                                        " recusou -- numero de " +
-                                                        "destino e o proprio numero " +
-                                                        "deste SIM. Tentando SIM " +
-                                                        outroSim +
-                                                        "..."
-                                                );
 
                                                 AppLog.add(
                                                         ctx,
@@ -1645,11 +1512,7 @@ public class UssdTransferManager {
                                     sim +
                                     ": saldo baixou exatamente " +
                                     quantidadeMB +
-                                    "MB (antes=" +
-                                    saldoAntes +
-                                    " agora=" +
-                                    saldoAtual +
-                                    "MB) -- transferencia CONFIRMADA."
+                                    "MB -- transferencia CONFIRMADA."
                             );
 
                             Prefs.registrarTransferenciaUsada(
@@ -1669,19 +1532,6 @@ public class UssdTransferManager {
 
                             return;
                         }
-
-                        AppLog.add(
-                                ctx,
-                                TAG,
-                                "Reconciliacao SIM " +
-                                sim +
-                                ": saldo nao baixou como esperado " +
-                                "(antes=" +
-                                saldoAntes +
-                                " agora=" +
-                                saldoAtual +
-                                ") -- transferencia falhou de verdade."
-                        );
 
                         callback.onErro(
                                 combinarMotivos(
@@ -1740,16 +1590,6 @@ public class UssdTransferManager {
 
                             return;
                         }
-
-                        AppLog.add(
-                                ctx,
-                                TAG,
-                                "Reconciliacao SIM " +
-                                sim +
-                                ": falha ao consultar saldo (" +
-                                motivoConsulta +
-                                ") -- reportando erro original."
-                        );
 
                         callback.onErro(
                                 combinarMotivos(
@@ -1823,7 +1663,7 @@ public class UssdTransferManager {
                                 " nao e Vodacom " +
                                 "(operadora: " +
                                 nomeOperadora +
-                                ") -- vai ser ignorado para USSD."
+                                ")"
                         );
                     }
 
@@ -1839,8 +1679,7 @@ public class UssdTransferManager {
                     TAG,
                     "Sem permissao para verificar operadora " +
                     "do SIM " +
-                    sim +
-                    " -- deixando tentar normalmente."
+                    sim
             );
 
             return true;
@@ -1871,30 +1710,12 @@ public class UssdTransferManager {
 
         Objects.requireNonNull(callback);
 
-        if (!verificarLicenca(
-                ctx,
-                new ErroSimples() {
-                    @Override
-                    public void onErro(String mensagem) {
-                        callback.onErro(
-                                sim,
-                                mensagem
-                        );
-                    }
-                }
-        )) {
-            return;
-        }
-
         if (!temPermissoesENecessario(
                 ctx,
                 new ErroSimples() {
                     @Override
                     public void onErro(String mensagem) {
-                        callback.onErro(
-                                sim,
-                                mensagem
-                        );
+                        callback.onErro(sim, mensagem);
                     }
                 }
         )) {
@@ -1983,16 +1804,6 @@ public class UssdTransferManager {
 
                                                 TelaHelper.desligar();
 
-                                                AppLog.add(
-                                                        ctx,
-                                                        TAG,
-                                                        "Erro ao consultar saldo " +
-                                                        "credito SIM " +
-                                                        sim +
-                                                        ": " +
-                                                        motivo
-                                                );
-
                                                 callback.onErro(
                                                         sim,
                                                         motivo
@@ -2018,18 +1829,6 @@ public class UssdTransferManager {
     ) {
 
         Objects.requireNonNull(callback);
-
-        if (!verificarLicenca(
-                ctx,
-                new ErroSimples() {
-                    @Override
-                    public void onErro(String mensagem) {
-                        callback.onErro(mensagem);
-                    }
-                }
-        )) {
-            return;
-        }
 
         String numeroLimpo =
                 limparNumero(numero);
@@ -2086,9 +1885,7 @@ public class UssdTransferManager {
         }
 
         int simDisponivel =
-                Prefs.getSimCreditoDisponivel(
-                        ctx
-                );
+                Prefs.getSimCreditoDisponivel(ctx);
 
         if (simDisponivel == 0) {
 
@@ -2188,18 +1985,6 @@ public class UssdTransferManager {
 
                                                 TelaHelper.desligar();
 
-                                                AppLog.add(
-                                                        ctx,
-                                                        TAG,
-                                                        "Pre-check credito SIM " +
-                                                        sim +
-                                                        ": saldo=" +
-                                                        saldoMT +
-                                                        "MT, pedido=" +
-                                                        valor +
-                                                        "MT"
-                                                );
-
                                                 if (saldoMT < valor) {
 
                                                     String meuMotivo =
@@ -2217,14 +2002,6 @@ public class UssdTransferManager {
                                                             ": " +
                                                             saldoMT +
                                                             " meticais."
-                                                    );
-
-                                                    AppLog.add(
-                                                            ctx,
-                                                            TAG,
-                                                            meuMotivo +
-                                                            " -- sem fallback para credito, " +
-                                                            "devolvendo falha ao painel."
                                                     );
 
                                                     callback.onErro(
@@ -2272,21 +2049,12 @@ public class UssdTransferManager {
 
                                                 TelaHelper.desligar();
 
-                                                String meuMotivo =
+                                                callback.onErro(
                                                         "SIM " +
                                                         sim +
                                                         ": erro ao verificar saldo (" +
                                                         motivo +
-                                                        ")";
-
-                                                AppLog.add(
-                                                        ctx,
-                                                        TAG,
-                                                        meuMotivo
-                                                );
-
-                                                callback.onErro(
-                                                        meuMotivo
+                                                        ")"
                                                 );
                                             }
                                         }
@@ -2309,17 +2077,6 @@ public class UssdTransferManager {
             final int sim,
             final ResultadoCreditoCallback callback
     ) {
-
-        if (!LicenseManager.estaAtivado(ctx)) {
-
-            TelaHelper.desligar();
-
-            callback.onErro(
-                    "Licença expirada ou não ativada."
-            );
-
-            return;
-        }
 
         TelaHelper.ligar(ctx);
 
@@ -2385,9 +2142,7 @@ public class UssdTransferManager {
                                                         " -- sucesso."
                                                 );
 
-                                                callback.onSucesso(
-                                                        sim
-                                                );
+                                                callback.onSucesso(sim);
                                             }
 
                                             @Override
@@ -2406,18 +2161,6 @@ public class UssdTransferManager {
                                                     )
                                                 ) {
 
-                                                    AppLog.add(
-                                                            ctx,
-                                                            TAG,
-                                                            "Credito SIM " +
-                                                            sim +
-                                                            ": erro ambiguo apos " +
-                                                            "enviar numero (" +
-                                                            motivo +
-                                                            ") -- a consultar " +
-                                                            "saldo *100# para confirmar."
-                                                    );
-
                                                     reconciliarCreditoAposErro(
                                                             ctx,
                                                             valorMT,
@@ -2430,22 +2173,11 @@ public class UssdTransferManager {
 
                                                 } else {
 
-                                                    String meuMotivo =
+                                                    callback.onErro(
                                                             "SIM " +
                                                             sim +
                                                             ": " +
-                                                            motivo;
-
-                                                    AppLog.add(
-                                                            ctx,
-                                                            TAG,
-                                                            "Erro transferencia " +
-                                                            "credito: " +
-                                                            meuMotivo
-                                                    );
-
-                                                    callback.onErro(
-                                                            meuMotivo
+                                                            motivo
                                                     );
                                                 }
                                             }
@@ -2490,13 +2222,6 @@ public class UssdTransferManager {
 
             TelaHelper.desligar();
 
-            AppLog.add(
-                    ctx,
-                    TAG,
-                    "Reconciliacao credito: falha ao discar *100# " +
-                    "-- reportando erro original."
-            );
-
             callback.onErro(
                     "SIM " +
                     sim +
@@ -2524,11 +2249,6 @@ public class UssdTransferManager {
 
                                                 TelaHelper.desligar();
 
-                                                /*
-                                                 * Consideramos confirmado se
-                                                 * o saldo diminuiu pelo menos
-                                                 * o valor transferido.
-                                                 */
                                                 if (
                                                     saldoAntes >= 0.0 &&
                                                     saldoAtual <=
@@ -2540,11 +2260,7 @@ public class UssdTransferManager {
                                                             TAG,
                                                             "Reconciliacao credito SIM " +
                                                             sim +
-                                                            ": saldo baixou de " +
-                                                            saldoAntes +
-                                                            "MT para " +
-                                                            saldoAtual +
-                                                            "MT -- transferencia CONFIRMADA."
+                                                            ": transferencia CONFIRMADA."
                                                     );
 
                                                     Prefs.setSaldoCredito(
@@ -2558,24 +2274,9 @@ public class UssdTransferManager {
                                                             "com sucesso."
                                                     );
 
-                                                    callback.onSucesso(
-                                                            sim
-                                                    );
+                                                    callback.onSucesso(sim);
 
                                                 } else {
-
-                                                    AppLog.add(
-                                                            ctx,
-                                                            TAG,
-                                                            "Reconciliacao credito SIM " +
-                                                            sim +
-                                                            ": saldo nao baixou como " +
-                                                            "esperado (antes=" +
-                                                            saldoAntes +
-                                                            "MT agora=" +
-                                                            saldoAtual +
-                                                            "MT) -- falhou de verdade."
-                                                    );
 
                                                     callback.onErro(
                                                             "SIM " +
@@ -2601,15 +2302,6 @@ public class UssdTransferManager {
                                             ) {
 
                                                 TelaHelper.desligar();
-
-                                                AppLog.add(
-                                                        ctx,
-                                                        TAG,
-                                                        "Reconciliacao credito SIM " +
-                                                        sim +
-                                                        ": falha ao consultar " +
-                                                        "saldo -- reportando erro original."
-                                                );
 
                                                 callback.onErro(
                                                         "SIM " +
@@ -2665,11 +2357,15 @@ public class UssdTransferManager {
 
             if (tm == null) {
 
-                return "TelecomManager indisponível no sistema.";
+                return "TelecomManager indisponivel no sistema.";
             }
 
             List<PhoneAccountHandle> todas =
                     tm.getCallCapablePhoneAccounts();
+
+            if (todas == null) {
+                todas = new ArrayList<>();
+            }
 
             List<PhoneAccountHandle> simsDisponiveis =
                     new ArrayList<>();
@@ -2689,9 +2385,7 @@ public class UssdTransferManager {
                     )
                 ) {
 
-                    simsDisponiveis.add(
-                            handle
-                    );
+                    simsDisponiveis.add(handle);
                 }
             }
 
@@ -2704,8 +2398,7 @@ public class UssdTransferManager {
                         ").";
             }
 
-            int indice =
-                    sim - 1;
+            int indice = sim - 1;
 
             if (
                 indice >= 0 &&
@@ -2739,8 +2432,8 @@ public class UssdTransferManager {
             );
 
             return
-                    "SecurityException — permissão CALL_PHONE " +
-                    "não concedida em tempo real: " +
+                    "SecurityException -- permissao CALL_PHONE " +
+                    "nao concedida em tempo real: " +
                     e.getMessage();
 
         } catch (Exception e) {
