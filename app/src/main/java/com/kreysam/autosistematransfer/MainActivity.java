@@ -107,6 +107,16 @@ protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
+
+    TextView teste = new TextView(this);
+    teste.setText("LAYOUT ABRIU");
+    teste.setTextSize(22);
+    teste.setPadding(40, 80, 40, 40);
+
+    addContentView(teste, new ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+    ));
 }
 
     private void construirInterfaceNativa() {
