@@ -106,12 +106,7 @@ public class MainActivity extends AppCompatActivity {
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    TextView teste = new TextView(this);
-    teste.setText("APP ABRIU — MODO TESTE");
-    teste.setTextSize(22);
-    teste.setPadding(40, 80, 40, 40);
-
-    setContentView(teste);
+    setContentView(R.layout.activity_main);
 }
 
     private void construirInterfaceNativa() {
