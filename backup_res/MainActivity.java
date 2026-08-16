@@ -1,4 +1,4 @@
-package com.kreysam.autosistematransfer;
+package com.lacoste.auto;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import com.kreysam.autosistematransfer.UssdTransferManager;
+import com.lacoste.auto.UssdTransferManager;
 import org.json.JSONObject;
 
 /* JADX INFO: loaded from: classes3.dex */
@@ -82,15 +82,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent("android.settings.ACCESSIBILITY_SETTINGS"));
     }
 
-    /* JADX INFO: renamed from: com.kreysam.autosistematransfer.MainActivity$1, reason: invalid class name */
+    /* JADX INFO: renamed from: com.lacoste.auto.MainActivity$1, reason: invalid class name */
     class AnonymousClass1 implements UssdTransferManager.ResultadoCallback {
         AnonymousClass1() {
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.ResultadoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.ResultadoCallback
         public void onSucesso(int sim, int saldoRestanteMB) {
             final String msg = "Transferido via SIM " + sim + " — saldo restante: " + saldoRestanteMB + "MB";
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$1$$ExternalSyntheticLambda0
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$1$$ExternalSyntheticLambda0
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m38x31e0ab82(msg);
@@ -98,15 +98,15 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        /* JADX INFO: renamed from: lambda$onSucesso$0$com-kreysam-autosistematransfer-MainActivity$1, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onSucesso$0$com.lacoste.auto-MainActivity$1, reason: not valid java name */
         /* synthetic */ void m38x31e0ab82(String msg) {
             MainActivity.this.webView.evaluateJavascript("mostrarResultadoTransferencia(true, " + JSONObject.quote(msg) + ")", null);
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.ResultadoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.ResultadoCallback
         public void onFalhaSaldoInsuficiente(String detalhes) {
             final String msg = "Nenhum SIM disponivel. " + (detalhes != null ? detalhes : "");
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$1$$ExternalSyntheticLambda2
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$1$$ExternalSyntheticLambda2
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m37x9162520b(msg);
@@ -114,19 +114,19 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        /* JADX INFO: renamed from: lambda$onFalhaSaldoInsuficiente$1$com-kreysam-autosistematransfer-MainActivity$1, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onFalhaSaldoInsuficiente$1$com.lacoste.auto-MainActivity$1, reason: not valid java name */
         /* synthetic */ void m37x9162520b(String msg) {
             MainActivity.this.webView.evaluateJavascript("mostrarResultadoTransferencia(false, " + JSONObject.quote(msg) + ")", null);
         }
 
-        /* JADX INFO: renamed from: lambda$onErro$2$com-kreysam-autosistematransfer-MainActivity$1, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onErro$2$com.lacoste.auto-MainActivity$1, reason: not valid java name */
         /* synthetic */ void m36lambda$onErro$2$comkreysamautosistematransferMainActivity$1(String motivo) {
             MainActivity.this.webView.evaluateJavascript("mostrarResultadoTransferencia(false, " + JSONObject.quote(motivo) + ")", null);
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.ResultadoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.ResultadoCallback
         public void onErro(final String motivo) {
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$1$$ExternalSyntheticLambda1
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$1$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m36lambda$onErro$2$comkreysamautosistematransferMainActivity$1(motivo);
@@ -139,19 +139,19 @@ public class MainActivity extends AppCompatActivity {
         UssdTransferManager.transferir(this, quantidadeMB, numero, new AnonymousClass1());
     }
 
-    /* JADX INFO: renamed from: com.kreysam.autosistematransfer.MainActivity$2, reason: invalid class name */
+    /* JADX INFO: renamed from: com.lacoste.auto.MainActivity$2, reason: invalid class name */
     class AnonymousClass2 implements UssdTransferManager.SaldoCallback {
         AnonymousClass2() {
         }
 
-        /* JADX INFO: renamed from: lambda$onSaldoLido$0$com-kreysam-autosistematransfer-MainActivity$2, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onSaldoLido$0$com.lacoste.auto-MainActivity$2, reason: not valid java name */
         /* synthetic */ void m40x12e74f3d(int simRetornado, int saldoMB) {
             MainActivity.this.webView.evaluateJavascript("mostrarSaldoConsultado(" + simRetornado + ", " + saldoMB + ", true, null)", null);
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.SaldoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.SaldoCallback
         public void onSaldoLido(final int simRetornado, final int saldoMB) {
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$2$$ExternalSyntheticLambda1
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$2$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m40x12e74f3d(simRetornado, saldoMB);
@@ -159,14 +159,14 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        /* JADX INFO: renamed from: lambda$onErro$1$com-kreysam-autosistematransfer-MainActivity$2, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onErro$1$com.lacoste.auto-MainActivity$2, reason: not valid java name */
         /* synthetic */ void m39lambda$onErro$1$comkreysamautosistematransferMainActivity$2(int simRetornado, String motivo) {
             MainActivity.this.webView.evaluateJavascript("mostrarSaldoConsultado(" + simRetornado + ", -1, false, " + JSONObject.quote(motivo) + ")", null);
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.SaldoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.SaldoCallback
         public void onErro(final int simRetornado, final String motivo) {
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$2$$ExternalSyntheticLambda0
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$2$$ExternalSyntheticLambda0
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m39lambda$onErro$1$comkreysamautosistematransferMainActivity$2(simRetornado, motivo);
@@ -179,15 +179,15 @@ public class MainActivity extends AppCompatActivity {
         UssdTransferManager.consultarSaldo(this, sim, new AnonymousClass2());
     }
 
-    /* JADX INFO: renamed from: com.kreysam.autosistematransfer.MainActivity$3, reason: invalid class name */
+    /* JADX INFO: renamed from: com.lacoste.auto.MainActivity$3, reason: invalid class name */
     class AnonymousClass3 implements UssdTransferManager.ResultadoCreditoCallback {
         AnonymousClass3() {
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.ResultadoCreditoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.ResultadoCreditoCallback
         public void onSucesso(int sim) {
             final String msg = "Credito transferido via SIM " + sim;
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$3$$ExternalSyntheticLambda1
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$3$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m42x31e0ab84(msg);
@@ -195,19 +195,19 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        /* JADX INFO: renamed from: lambda$onSucesso$0$com-kreysam-autosistematransfer-MainActivity$3, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onSucesso$0$com.lacoste.auto-MainActivity$3, reason: not valid java name */
         /* synthetic */ void m42x31e0ab84(String msg) {
             MainActivity.this.webView.evaluateJavascript("mostrarResultadoCredito(true, " + JSONObject.quote(msg) + ")", null);
         }
 
-        /* JADX INFO: renamed from: lambda$onErro$1$com-kreysam-autosistematransfer-MainActivity$3, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onErro$1$com.lacoste.auto-MainActivity$3, reason: not valid java name */
         /* synthetic */ void m41lambda$onErro$1$comkreysamautosistematransferMainActivity$3(String motivo) {
             MainActivity.this.webView.evaluateJavascript("mostrarResultadoCredito(false, " + JSONObject.quote(motivo) + ")", null);
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.ResultadoCreditoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.ResultadoCreditoCallback
         public void onErro(final String motivo) {
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$3$$ExternalSyntheticLambda0
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$3$$ExternalSyntheticLambda0
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m41lambda$onErro$1$comkreysamautosistematransferMainActivity$3(motivo);
@@ -220,19 +220,19 @@ public class MainActivity extends AppCompatActivity {
         UssdTransferManager.transferirCredito(this, valorMT, numero, new AnonymousClass3());
     }
 
-    /* JADX INFO: renamed from: com.kreysam.autosistematransfer.MainActivity$4, reason: invalid class name */
+    /* JADX INFO: renamed from: com.lacoste.auto.MainActivity$4, reason: invalid class name */
     class AnonymousClass4 implements UssdTransferManager.SaldoCreditoCallback {
         AnonymousClass4() {
         }
 
-        /* JADX INFO: renamed from: lambda$onSaldoLido$0$com-kreysam-autosistematransfer-MainActivity$4, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onSaldoLido$0$com.lacoste.auto-MainActivity$4, reason: not valid java name */
         /* synthetic */ void m44x12e74f3f(int simRetornado, double saldoMT) {
             MainActivity.this.webView.evaluateJavascript("mostrarSaldoCreditoConsultado(" + simRetornado + ", " + saldoMT + ", true, null)", null);
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.SaldoCreditoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.SaldoCreditoCallback
         public void onSaldoLido(final int simRetornado, final double saldoMT) {
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$4$$ExternalSyntheticLambda0
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$4$$ExternalSyntheticLambda0
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m44x12e74f3f(simRetornado, saldoMT);
@@ -240,14 +240,14 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        /* JADX INFO: renamed from: lambda$onErro$1$com-kreysam-autosistematransfer-MainActivity$4, reason: not valid java name */
+        /* JADX INFO: renamed from: lambda$onErro$1$com.lacoste.auto-MainActivity$4, reason: not valid java name */
         /* synthetic */ void m43lambda$onErro$1$comkreysamautosistematransferMainActivity$4(int simRetornado, String motivo) {
             MainActivity.this.webView.evaluateJavascript("mostrarSaldoCreditoConsultado(" + simRetornado + ", -1, false, " + JSONObject.quote(motivo) + ")", null);
         }
 
-        @Override // com.kreysam.autosistematransfer.UssdTransferManager.SaldoCreditoCallback
+        @Override // com.lacoste.auto.UssdTransferManager.SaldoCreditoCallback
         public void onErro(final int simRetornado, final String motivo) {
-            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.kreysam.autosistematransfer.MainActivity$4$$ExternalSyntheticLambda1
+            MainActivity.this.runOnUiThread(new Runnable() { // from class: com.lacoste.auto.MainActivity$4$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {
                     this.f$0.m43lambda$onErro$1$comkreysamautosistematransferMainActivity$4(simRetornado, motivo);

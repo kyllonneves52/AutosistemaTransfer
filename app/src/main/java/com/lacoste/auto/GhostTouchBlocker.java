@@ -32,7 +32,7 @@ public class GhostTouchBlocker {
             } else {
                 type = 2002;
             }
-            View view = new View(ctx) { // from class: com.kreysam.autosistematransfer.GhostTouchBlocker.1
+            View view = new View(ctx) { // from class: com.lacoste.auto.GhostTouchBlocker.1
                 @Override // android.view.View
                 public boolean onTouchEvent(MotionEvent e) {
                     return true;
@@ -48,7 +48,7 @@ public class GhostTouchBlocker {
             btn.setTextSize(22.0f);
             btn.setBackgroundColor(-856734652);
             btn.setPadding(8, 8, 8, 8);
-            btn.setOnClickListener(new View.OnClickListener() { // from class: com.kreysam.autosistematransfer.GhostTouchBlocker$$ExternalSyntheticLambda0
+            btn.setOnClickListener(new View.OnClickListener() { // from class: com.lacoste.auto.GhostTouchBlocker$$ExternalSyntheticLambda0
                 @Override // android.view.View.OnClickListener
                 public final void onClick(View view2) {
                     GhostTouchBlocker.desactivar();

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.kreysam.autosistematransfer'
+    namespace 'com.lacoste.auto'
     compileSdk 33
 
     defaultConfig {
-        applicationId 'com.kreysam.autosistematransfer'
+        applicationId 'com.lacoste.auto'
         minSdk 23
         targetSdk 33
         versionCode 1

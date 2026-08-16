@@ -51,7 +51,7 @@ public class ApiClient {
         } else if (token.isEmpty()) {
             postCallback(cb, false, "Cola o token primeiro.");
         } else {
-            new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda2
+            new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda2
                 @Override // java.lang.Runnable
                 public final void run() {
                     ApiClient.lambda$registarDispositivo$0(token, ctx, base, cb);
@@ -91,7 +91,7 @@ public class ApiClient {
         if (base.isEmpty()) {
             return;
         }
-        new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda7
+        new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda7
             @Override // java.lang.Runnable
             public final void run() {
                 ApiClient.lambda$verificarStatusDispositivo$1(ctx, base, cb);
@@ -141,7 +141,7 @@ public class ApiClient {
                 Prefs.setUltimoErro(ctx, "Sem token configurado.");
                 return;
             }
-            new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda1
+            new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {
                     ApiClient.lambda$enviarParaPainel$2(texto, token, ctx, base);
@@ -182,7 +182,7 @@ public class ApiClient {
         if (base.isEmpty() || token.isEmpty()) {
             cb.onErro("Sem URL ou token do painel configurado.");
         } else {
-            new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda3
+            new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda3
                 @Override // java.lang.Runnable
                 public final void run() {
                     ApiClient.lambda$buscarPedidos$3(base, ctx, token, cb);
@@ -223,7 +223,7 @@ public class ApiClient {
             }
             return;
         }
-        new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda6
+        new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda6
             @Override // java.lang.Runnable
             public final void run() {
                 ApiClient.lambda$concluirPedido$4(pedidoId, ctx, token, base, cb);
@@ -268,7 +268,7 @@ public class ApiClient {
         if (base.isEmpty() || token.isEmpty()) {
             return;
         }
-        new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda5
+        new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda5
             @Override // java.lang.Runnable
             public final void run() {
                 ApiClient.lambda$falharPedido$5(pedidoId, motivo, ctx, token, base);
@@ -301,7 +301,7 @@ public class ApiClient {
         if (base.isEmpty() || token.isEmpty()) {
             return;
         }
-        new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda4
+        new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda4
             @Override // java.lang.Runnable
             public final void run() {
                 ApiClient.lambda$enviarHeartbeat$6(token, ctx, base);
@@ -337,7 +337,7 @@ public class ApiClient {
     }
 
     public static void relatarResultadoComRetentativa(final Context ctx, final JSONObject payload, final String endpoint) {
-        new Thread(new Runnable() { // from class: com.kreysam.autosistematransfer.ApiClient$$ExternalSyntheticLambda0
+        new Thread(new Runnable() { // from class: com.lacoste.auto.ApiClient$$ExternalSyntheticLambda0
             @Override // java.lang.Runnable
             public final void run() {
                 ApiClient.lambda$relatarResultadoComRetentativa$7(ctx, endpoint, payload);

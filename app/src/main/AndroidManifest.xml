@@ -23,9 +23,9 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <permission
-        android:name="com.kreysam.autosistematransfer.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.lacoste.auto.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature"/>
-    <uses-permission android:name="com.kreysam.autosistematransfer.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
+    <uses-permission android:name="com.lacoste.auto.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
     <application
         android:theme="@style/AppTheme"
         android:label="@string/app_name"
@@ -37,7 +37,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory">
         <activity
-            android:name="com.kreysam.autosistematransfer.MainActivity"
+            android:name="com.lacoste.auto.MainActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name="com.kreysam.autosistematransfer.BootReceiver"
+            android:name="com.lacoste.auto.BootReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -55,11 +55,11 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="com.kreysam.autosistematransfer.MonitorService"
+            android:name="com.lacoste.auto.MonitorService"
             android:exported="false"
             android:foregroundServiceType="dataSync"/>
         <receiver
-            android:name="com.kreysam.autosistematransfer.DeviceAdminReceiverImpl"
+            android:name="com.lacoste.auto.DeviceAdminReceiverImpl"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
             android:exported="true">
             <meta-data
@@ -70,7 +70,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="com.kreysam.autosistematransfer.UssdAccessibilityService"
+            android:name="com.lacoste.auto.UssdAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="false"
             android:foregroundServiceType="connectedDevice">
@@ -84,7 +84,7 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:exported="false"
-            android:authorities="com.kreysam.autosistematransfer.androidx-startup">
+            android:authorities="com.lacoste.auto.androidx-startup">
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"
                 android:value="androidx.startup"/>
