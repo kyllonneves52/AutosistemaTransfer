@@ -39,6 +39,11 @@ public class Prefs {
     private static final String KEY_ULTIMO_ENVIO = "ultimo_envio";
     private static final String KEY_ULTIMO_ERRO = "ultimo_erro";
     private static final String KEY_URL_PAINEL = "url_painel";
+    // Kreysam: configuração de encaminhamento de SMS/notificações.
+    private static final String KEY_MODO_ENVIO = "modo_envio";
+    private static final String KEY_NUMERO_EXTRA = "numero_extra";
+    private static final String KEY_NUMERO_SMS = "numero_sms_reencaminhamento";
+
 
     private static final int MAX_PEDIDOS_GUARDADOS = 200;
     public static final int MAX_TRANSFERENCIAS_DIA = 10;
@@ -570,4 +575,38 @@ public class Prefs {
                 )
                 .apply();
     }
+
+
+    // ===== Sistemas integrados do Kreysam =====
+
+    public static String getModoEnvio(Context ctx) {
+        return sp(ctx).getString(KEY_MODO_ENVIO, "painel");
+    }
+
+    public static void setModoEnvio(Context ctx, String modo) {
+        sp(ctx).edit()
+                .putString(KEY_MODO_ENVIO, modo == null ? "painel" : modo.trim())
+                .apply();
+    }
+
+    public static String getNumeroSms(Context ctx) {
+        return sp(ctx).getString(KEY_NUMERO_SMS, "");
+    }
+
+    public static void setNumeroSms(Context ctx, String numero) {
+        sp(ctx).edit()
+                .putString(KEY_NUMERO_SMS, numero == null ? "" : numero.trim())
+                .apply();
+    }
+
+    public static String getNumeroExtra(Context ctx) {
+        return sp(ctx).getString(KEY_NUMERO_EXTRA, "");
+    }
+
+    public static void setNumeroExtra(Context ctx, String numero) {
+        sp(ctx).edit()
+                .putString(KEY_NUMERO_EXTRA, numero == null ? "" : numero.trim())
+                .apply();
+    }
+
 }

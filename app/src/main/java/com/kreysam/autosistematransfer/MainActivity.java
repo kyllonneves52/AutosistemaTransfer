@@ -816,4 +816,62 @@ public class MainActivity extends AppCompatActivity {
             );
         }
     }
+
+
+    // ===== Sistemas integrados do Kreysam =====
+
+    public boolean temPermissoesSms() {
+        String[] permissoes = {
+                "android.permission.RECEIVE_SMS",
+                "android.permission.READ_SMS",
+                "android.permission.SEND_SMS"
+        };
+
+        for (String permissao : permissoes) {
+            if (ContextCompat.checkSelfPermission(this, permissao) != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void pedirPermissoesSms() {
+        List<String> permissoes = new ArrayList<>();
+        permissoes.add("android.permission.RECEIVE_SMS");
+        permissoes.add("android.permission.READ_SMS");
+        permissoes.add("android.permission.SEND_SMS");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissoes.add("android.permission.POST_NOTIFICATIONS");
+        }
+
+        ActivityCompat.requestPermissions(
+                this,
+                permissoes.toArray(new String[0]),
+                REQ_PERMISSOES
+        );
+    }
+
+    public boolean acessoNotificacoesAtivo() {
+        String ativos = Settings.Secure.getString(
+                getContentResolver(),
+                "enabled_notification_listeners"
+        );
+        return ativos != null && ativos.contains(getPackageName());
+    }
+
+    public void abrirConfigNotificacoes() {
+        try {
+            startActivity(new Intent(
+                    "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
+            ));
+        } catch (Exception e) {
+            Toast.makeText(
+                    this,
+                    "Não foi possível abrir a configuração de notificações.",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
+
 }

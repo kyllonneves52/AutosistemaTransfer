@@ -607,4 +607,58 @@ public class WebAppInterface {
     public void limparLog() {
         AppLog.limpar(activity);
     }
+
+
+    // ===== Kreysam: configuração de SMS/notificações =====
+
+    @JavascriptInterface
+    public String getModoEnvio() {
+        return Prefs.getModoEnvio(activity);
+    }
+
+    @JavascriptInterface
+    public void setModoEnvio(String modo) {
+        Prefs.setModoEnvio(activity, modo);
+    }
+
+    @JavascriptInterface
+    public String getNumeroSms() {
+        return Prefs.getNumeroSms(activity);
+    }
+
+    @JavascriptInterface
+    public void setNumeroSms(String numero) {
+        Prefs.setNumeroSms(activity, numero);
+    }
+
+    @JavascriptInterface
+    public String getNumeroExtra() {
+        return Prefs.getNumeroExtra(activity);
+    }
+
+    @JavascriptInterface
+    public void setNumeroExtra(String numero) {
+        Prefs.setNumeroExtra(activity, numero);
+    }
+
+    @JavascriptInterface
+    public boolean temPermissoesSms() {
+        return activity.temPermissoesSms();
+    }
+
+    @JavascriptInterface
+    public void pedirPermissoesSms() {
+        activity.pedirPermissoesSms();
+    }
+
+    @JavascriptInterface
+    public boolean acessoNotificacoesAtivo() {
+        return activity.acessoNotificacoesAtivo();
+    }
+
+    @JavascriptInterface
+    public void abrirConfigNotificacoes() {
+        activity.abrirConfigNotificacoes();
+    }
+
 }
