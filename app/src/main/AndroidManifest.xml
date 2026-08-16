@@ -4,7 +4,7 @@
     android:versionName="1.0"
     android:compileSdkVersion="33"
     android:compileSdkVersionCodename="13"
-    package="com.kreysam.autosistematransfer"
+    package="com.lacoste.auto"
     platformBuildVersionCode="33"
     platformBuildVersionName="13">
     <uses-sdk

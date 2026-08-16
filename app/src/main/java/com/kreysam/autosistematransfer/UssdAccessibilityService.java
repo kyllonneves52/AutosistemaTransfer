@@ -1,4 +1,4 @@
-package com.kreysam.autosistematransfer;
+package com.lacoste.auto;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
