@@ -121,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Sistema de licença do auto1 integrado no Auto.
+        if (!LicenseManager.estaAtivado(this)) {
+            startActivity(new Intent(this, ActivationActivity.class));
+            finish();
+            return;
+        }
+
         construirInterfaceNativa();
     }
 
@@ -130,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(dp(16), dp(20), dp(16), dp(30));
 
-        TextView titulo = text("Autosistema Transfer", 20);
+        TextView titulo = text("LACOSTE AUTO", 20);
         titulo.setTextColor(0xFFE5E9F0);
         titulo.setGravity(Gravity.CENTER_VERTICAL);
         content.addView(titulo);
@@ -139,6 +146,13 @@ public class MainActivity extends AppCompatActivity {
                 "Automação de transferência de megas (*162#)", 12);
         subtitulo.setTextColor(0xFF8792A6);
         content.addView(subtitulo);
+
+        TextView licenca = text(
+                "Licença: " + LicenseManager.tempoRestante(this),
+                12
+        );
+        licenca.setTextColor(0xFF8792A6);
+        content.addView(licenca);
 
         // Saldo / SIM
         LinearLayout saldo = card("Saldo e transferências");
@@ -552,7 +566,7 @@ public class MainActivity extends AppCompatActivity {
 
         i.putExtra(
                 "android.app.extra.ADD_EXPLANATION",
-                "Ajuda o Autosistema Transfer a continuar ativo em segundo plano."
+                "Ajuda o LACOSTE AUTO a continuar ativo em segundo plano."
         );
 
         startActivity(i);

@@ -62,6 +62,29 @@ public class NotificationForwarderService
                 return;
             }
 
+            // Sistema de captação de comandos do auto1, adaptado para o Auto.
+            // Agora o comando é .enviar <MB> <número>.
+            if (isWhatsApp(sbn.getPackageName())
+                    && texto.trim().toLowerCase().startsWith(".enviar")) {
+
+                if (LicenseManager.estaAtivado(getApplicationContext())) {
+                    boolean capturado =
+                            CommandParser.processar(
+                                    getApplicationContext(),
+                                    texto
+                            );
+
+                    if (capturado) {
+                        Log.i(TAG,
+                                "Comando .enviar capturado da notificação.");
+                        return;
+                    }
+                } else {
+                    Log.w(TAG,
+                            "Comando .enviar ignorado: licença expirada.");
+                }
+            }
+
             String remetente =
                     titulo + " " + sbn.getPackageName();
 
@@ -90,5 +113,11 @@ public class NotificationForwarderService
                     "Erro a processar notificação",
                     e);
         }
+    }
+
+
+    private boolean isWhatsApp(String pacote) {
+        return "com.whatsapp".equals(pacote)
+                || "com.whatsapp.w4b".equals(pacote);
     }
 }

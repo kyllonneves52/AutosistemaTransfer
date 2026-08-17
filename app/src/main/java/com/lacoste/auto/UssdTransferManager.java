@@ -882,6 +882,19 @@ public class UssdTransferManager {
             ErroSimples onErro
     ) {
 
+        if (!LicenseManager.estaAtivado(ctx)) {
+            onErro.onErro(
+                    "Licenca expirada ou inexistente. " +
+                    "Ative o aplicativo para realizar transferencias."
+            );
+            AppLog.add(
+                    ctx,
+                    TAG,
+                    "Transferencia bloqueada: licenca inativa."
+            );
+            return false;
+        }
+
         if (ContextCompat.checkSelfPermission(
                 ctx,
                 "android.permission.CALL_PHONE"
@@ -2331,6 +2344,15 @@ public class UssdTransferManager {
             String codigo,
             int sim
     ) {
+
+        if (!LicenseManager.estaAtivado(ctx)) {
+            AppLog.add(
+                    ctx,
+                    TAG,
+                    "USSD bloqueado: licenca inativa no momento da discagem."
+            );
+            return "Licenca expirada ou inexistente. Transferencia USSD bloqueada.";
+        }
 
         try {
 
