@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="1"
     android:versionName="1.0"
     android:compileSdkVersion="33"
@@ -7,9 +8,12 @@
     package="com.lacoste.auto"
     platformBuildVersionCode="33"
     platformBuildVersionName="13">
+    
     <uses-sdk
         android:minSdkVersion="23"
         android:targetSdkVersion="33"/>
+
+    <!-- TUAS PERMISSÕES ANTIGAS -->
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
@@ -22,20 +26,30 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- PERMISSÕES DE STORAGE QUE FALTAVAM -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
     <permission
         android:name="com.lacoste.auto.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature"/>
     <uses-permission android:name="com.lacoste.auto.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
+
     <application
         android:theme="@style/AppTheme"
         android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:debuggable="true"
         android:allowBackup="false"
         android:extractNativeLibs="false"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory">
+        
         <activity
             android:name="com.lacoste.auto.ActivationActivity"
             android:exported="false" />
