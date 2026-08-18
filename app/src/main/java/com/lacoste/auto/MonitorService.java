@@ -25,7 +25,8 @@ public class MonitorService extends Service {
 
     private static final long COOLDOWN_FALHA_MS = 120000;
     private static final long INTERVALO_FILA_MS = 20000;
-    private static final long INTERVALO_HEARTBEAT_MS = 30000;\n    private static final long INTERVALO_LICENCA_MS = 60000;
+    private static final long INTERVALO_HEARTBEAT_MS = 30000;
+    private static final long INTERVALO_LICENCA_MS = 60000;
     private static final long INTERVALO_RETRY_ERRO_MS = 6000;
 
     private static final int MAX_TENTATIVAS_ERRO = 3;
