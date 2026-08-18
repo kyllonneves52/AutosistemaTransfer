@@ -3,7 +3,6 @@ package com.lacoste.auto;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -37,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView sim1Saldo, sim2Saldo;
     private TextView sim1Restantes, sim2Restantes;
-    private TextView androidIdView, aprovacaoView, acessibilidadeView;
+    private TextView acessibilidadeView;
     private TextView resultadoTransferencia, resultadoCredito;
-    private EditText urlView, tokenView;
 
     private TextView licencaView;
     private final Handler licenseHandler = new Handler(Looper.getMainLooper());
@@ -83,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-
         cp.setMargins(0, 0, 0, dp(12));
         c.setLayoutParams(cp);
 
@@ -91,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         h.setTextColor(0xFF8792A6);
         h.setPadding(0, 0, 0, dp(10));
         c.addView(h);
-
         return c;
     }
 
@@ -102,15 +98,12 @@ public class MainActivity extends AppCompatActivity {
         b.setAllCaps(false);
         b.setTextColor(0xFFE5E9F0);
         b.setBackgroundColor(0xFF1E2838);
-
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(50)
         );
-
         p.setMargins(0, dp(5), 0, dp(5));
         b.setLayoutParams(p);
-
         return b;
     }
 
@@ -123,15 +116,12 @@ public class MainActivity extends AppCompatActivity {
         e.setTextSize(14);
         e.setPadding(dp(12), 0, dp(12), 0);
         e.setBackgroundColor(0xFF1E2838);
-
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(52)
         );
-
         p.setMargins(0, dp(3), 0, dp(6));
         e.setLayoutParams(p);
-
         return e;
     }
 
@@ -153,14 +143,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) 
-               != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, 
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+              != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
             }
         }
 
-        // Sistema de licença do auto1 integrado no Auto.
         if (!LicenseManager.estaAtivado(this)) {
             startActivity(new Intent(this, ActivationActivity.class));
             finish();
@@ -173,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void construirInterfaceNativa() {
-
         LinearLayout content = new LinearLayout(this);
         content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(dp(16), dp(20), dp(16), dp(30));
@@ -193,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Saldo / SIM
         LinearLayout saldo = card("Saldo e transferências");
-
         LinearLayout sims = new LinearLayout(this);
         sims.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -241,20 +228,6 @@ public class MainActivity extends AppCompatActivity {
         sims.addView(s2);
         saldo.addView(sims);
         content.addView(saldo);
-
-        // Dispositivo
-        LinearLayout dispositivo = card("Dispositivo");
-        Button registrar = button("Registar / atualizar dispositivo");
-        registrar.setOnClickListener(v -> registarDispositivo());
-        dispositivo.addView(registrar);
-        content.addView(dispositivo);
-
-        // Painel
-        LinearLayout painel = card("Configuração do painel");
-        TextView aviso = text("O painel é opcional. Estas configurações estão temporariamente desativadas durante o teste.", 11);
-        aviso.setTextColor(0xFF8792A6);
-        painel.addView(aviso);
-        content.addView(painel);
 
         // Transferência manual
         LinearLayout manual = card("Transferência manual");
@@ -345,19 +318,6 @@ public class MainActivity extends AppCompatActivity {
         notificacoes.setOnClickListener(v -> abrirConfigNotificacoes());
         permissoes.addView(notificacoes);
 
-        // Diagnóstico
-        LinearLayout diagnostico = card("Diagnóstico");
-        Button log = button("Ver log detalhado");
-        log.setOnClickListener(v -> mostrarLog());
-        diagnostico.addView(log);
-        Button limpar = button("Limpar log");
-        limpar.setOnClickListener(v -> {
-            AppLog.limpar(this);
-            Toast.makeText(this, "Log limpo.", Toast.LENGTH_SHORT).show();
-        });
-        diagnostico.addView(limpar);
-        content.addView(diagnostico);
-
         content.addView(permissoes);
 
         ScrollView scroll = new ScrollView(this);
@@ -370,14 +330,6 @@ public class MainActivity extends AppCompatActivity {
     private void atualizarRestantes() {
         if (sim1Restantes!= null) sim1Restantes.setText("Transferências");
         if (sim2Restantes!= null) sim2Restantes.setText("Transferências");
-    }
-
-    private void registarDispositivo() {
-        ApiClient.registarDispositivo(this, (ok, msg) ->
-                runOnUiThread(() -> {
-                    Toast.makeText(this, msg == null? (ok? "Registado." : "Falhou.") : msg, Toast.LENGTH_LONG).show();
-                })
-        );
     }
 
     public boolean temPermissaoChamadas() {
@@ -509,23 +461,9 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    public void consultarSaldoCreditoSim(int sim) {
-        UssdTransferManager.consultarSaldoCredito(this, sim, new UssdTransferManager.SaldoCreditoCallback() {
-                    @Override public void onSaldoLido(int simRetornado, double saldoMT) {}
-                    @Override public void onErro(int simRetornado, String motivo) {}
-                }
-        );
-    }
-
     private void definirSimCredito(int sim) {
         Prefs.setSimCreditoDisponivel(this, sim);
         Toast.makeText(this, sim == 0? "Crédito desativado." : "Crédito: SIM " + sim, Toast.LENGTH_SHORT).show();
-    }
-
-    private void mostrarLog() {
-        TextView t = text(AppLog.ler(this), 11);
-        t.setTextIsSelectable(true);
-        new AlertDialog.Builder(this).setTitle("Log detalhado").setView(t).setPositiveButton("Fechar", null).show();
     }
 
     public void iniciarMonitorService() {
@@ -536,28 +474,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             AppLog.add(this, "MainActivity", "Erro ao iniciar MonitorService: " + e.getMessage());
         }
-    }
-
-    // ===== Sistemas integrados do Kreysam =====
-    public boolean temPermissoesSms() {
-        String[] permissoes = {"android.permission.RECEIVE_SMS", "android.permission.READ_SMS", "android.permission.SEND_SMS"};
-        for (String permissao : permissoes) {
-            if (ContextCompat.checkSelfPermission(this, permissao)!= 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void pedirPermissoesSms() {
-        List<String> permissoes = new ArrayList<>();
-        permissoes.add("android.permission.RECEIVE_SMS");
-        permissoes.add("android.permission.READ_SMS");
-        permissoes.add("android.permission.SEND_SMS");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissoes.add("android.permission.POST_NOTIFICATIONS");
-        }
-        ActivityCompat.requestPermissions(this, permissoes.toArray(new String[0]), REQ_PERMISSOES);
     }
 
     public boolean acessoNotificacoesAtivo() {
