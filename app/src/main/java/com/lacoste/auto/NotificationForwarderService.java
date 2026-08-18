@@ -63,28 +63,29 @@ public class NotificationForwarderService
             }
 
             // Sistema de captação de comandos do auto1, adaptado para o Auto.
-            // Agora o comando é .enviar <MB> <número>.
-            if (isWhatsApp(sbn.getPackageName())
-                    && texto.trim().toLowerCase().startsWith(".enviar")) {
+// Agora o comando é.enviar <MB> <número> e.saldo <MT> <número>.
+String comandoLower = texto.trim().toLowerCase();
 
-                if (LicenseManager.estaAtivado(getApplicationContext())) {
-                    boolean capturado =
-                            CommandParser.processar(
-                                    getApplicationContext(),
-                                    texto
-                            );
+if (isWhatsApp(sbn.getPackageName())
+        && (comandoLower.startsWith(".enviar") || comandoLower.startsWith(".saldo"))) {
 
-                    if (capturado) {
-                        Log.i(TAG,
-                                "Comando .enviar capturado da notificação.");
-                        return;
-                    }
-                } else {
-                    Log.w(TAG,
-                            "Comando .enviar ignorado: licença expirada.");
-                }
-            }
+    if (LicenseManager.estaAtivado(getApplicationContext())) {
+        boolean capturado =
+                CommandParser.processar(
+                        getApplicationContext(),
+                        texto
+                );
 
+        if (capturado) {
+            Log.i(TAG,
+                    "Comando capturado da notificação: " + comandoLower.split(" ")[0]);
+            return;
+        }
+    } else {
+        Log.w(TAG,
+                "Comando ignorado: licença expirada.");
+    }
+}
             String remetente =
                     titulo + " " + sbn.getPackageName();
 

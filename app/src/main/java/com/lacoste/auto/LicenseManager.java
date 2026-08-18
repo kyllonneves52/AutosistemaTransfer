@@ -122,8 +122,10 @@ public class LicenseManager {
 
             long inicio = System.currentTimeMillis();
 
-            // Mantém a duração real usada pelo auto1: 1 dia.
-            long finalizacao = inicio + (20L * 60L * 1000L);
+            // Duração real do plano: DIAS_PLANO dias.
+            long duracaoMs =
+                    DIAS_PLANO * 24L * 60L * 60L * 1000L;
+            long finalizacao = inicio + duracaoMs;
 
             String dados =
                     "CHAVE=" + chave + "\n" +
@@ -143,6 +145,17 @@ public class LicenseManager {
             AppLog.add(context, "LicenseManager",
                     "Erro licença: " + e.getMessage());
             return false;
+        }
+    }
+
+    public static long millisRestantes(Context context) {
+        try {
+            String dados = LicenseStorage.ler();
+            if (dados == null) return 0L;
+            long fim = Long.parseLong(pegar(dados, "DATA_FINAL"));
+            return Math.max(0L, fim - System.currentTimeMillis());
+        } catch (Exception e) {
+            return 0L;
         }
     }
 

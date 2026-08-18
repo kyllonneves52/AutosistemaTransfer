@@ -122,6 +122,28 @@
   .modal-aviso { font-size: 11px; color: var(--red); min-height: 16px; margin-bottom: 10px; }
   .modal-btns { display: flex; gap: 10px; }
   .modal-btns button { flex: 1; margin: 0; }
+
+  body { max-width: 720px; margin: 0 auto; }
+  .header { padding: 10px 4px 4px; }
+  .logo { box-shadow: 0 8px 24px rgba(34,197,94,.18); }
+  .hero {
+    background: linear-gradient(145deg, #171F2E, #111827);
+    border: 1px solid rgba(34,197,94,.22);
+    border-radius: 18px; padding: 16px; margin-bottom: 14px;
+  }
+  .hero-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .hero-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .section-note { font-size: 11px; color: var(--muted); line-height: 1.5; margin: -4px 0 10px; }
+  .permission-grid { display:grid; grid-template-columns:1fr; gap:8px; }
+  .permission-grid button { margin:0; }
+  .test-badge {
+    display:inline-flex; padding:4px 8px; border-radius:999px;
+    background:rgba(34,197,94,.12); color:var(--accent);
+    font-size:10px; font-weight:700; letter-spacing:.5px;
+  }
+  @media (min-width: 560px) {
+    .permission-grid { grid-template-columns:1fr 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -142,11 +164,16 @@
   ">🔓</button>
 
   <div class="header">
-    <div class="logo">⚡</div>
+    <div class="logo">LA</div>
     <div>
       <h1>LACOSTE AUTO</h1>
-      <p>Automação de transferência de megas (*162#)</p>
+      <p>Automação de megas e crédito</p>
     </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-title">Lacoste Auto</div>
+    <div class="hero-sub">Painel de controlo para SIM, USSD, comandos .enviar e .saldo.</div>
   </div>
 
   <div class="card">
@@ -230,6 +257,17 @@
     <div id="resultado-credito" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
   </div>
 
+
+
+  <div class="card">
+    <h2>Log detalhado (diagnostico)</h2>
+    <textarea id="log-area" readonly style="width:100%;height:180px;background:var(--card2);color:var(--text);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;font-size:11px;font-family:monospace;white-space:pre-wrap;"></textarea>
+    <div style="display:flex;gap:10px;margin-top:10px">
+      <button class="btn-secondary" style="flex:1" onclick="copiarLog()"><span>Copiar</span></button>
+      <button class="btn-secondary" style="flex:1" onclick="limparLog()"><span>Limpar</span></button>
+    </div>
+  </div>
+
   <div class="card">
     <h2>Permissões</h2>
     <button class="btn-secondary" onclick="Android.pedirPermissoesChamadas()">
@@ -241,15 +279,9 @@
     <button class="btn-secondary" onclick="Android.abrirConfigDeviceAdmin()">
       <span>Ativar administrador do dispositivo</span><span class="dot" id="dot-admin"></span>
     </button>
-  </div>
-
-  <div class="card">
-    <h2>Log detalhado (diagnostico)</h2>
-    <textarea id="log-area" readonly style="width:100%;height:180px;background:var(--card2);color:var(--text);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;font-size:11px;font-family:monospace;white-space:pre-wrap;"></textarea>
-    <div style="display:flex;gap:10px;margin-top:10px">
-      <button class="btn-secondary" style="flex:1" onclick="copiarLog()"><span>Copiar</span></button>
-      <button class="btn-secondary" style="flex:1" onclick="limparLog()"><span>Limpar</span></button>
-    </div>
+    <button class="btn-secondary" onclick="Android.abrirConfigNotificacoes()">
+      <span>Ler notificações — .enviar / .saldo</span><span class="dot" id="dot-notif"></span>
+    </button>
   </div>
 
   <!-- Modal: Número fixo por SIM -->
@@ -302,6 +334,15 @@
       btn.style.boxShadow = '';
       mostrarToast('🔓 Ecrã desbloqueado');
     }
+  }
+
+  function atualizarPermissaoNotificacoes() {
+    try {
+      const ativo = Android.acessoNotificacoesAtivo();
+      const dot = document.getElementById('dot-notif');
+      if (dot) dot.classList.toggle('ok', ativo);
+      if (dot) dot.classList.toggle('bad', !ativo);
+    } catch (e) {}
   }
 
   function guardarUrl() {
@@ -596,6 +637,7 @@
   }
 
   function atualizarStatus() {
+    atualizarPermissaoNotificacoes();
     try {
       const status = JSON.parse(Android.getStatus());
       document.getElementById("log-area").value = Android.lerLog();

@@ -122,6 +122,37 @@ public class SmsReceiver extends BroadcastReceiver {
                     "SMS de: " + remetente
             );
 
+            // Comandos .enviar/.saldo recebidos por SMS.
+            // Por segurança, só aceita o remetente configurado em "número extra".
+            String comandoSms = texto.trim();
+            String extraComando = numeroExtra == null
+                    ? ""
+                    : numeroExtra.replaceAll("\\D", "");
+            String remetenteComando = remetente == null
+                    ? ""
+                    : remetente.replaceAll("\\D", "");
+
+            boolean ehComando =
+                    comandoSms.toLowerCase(java.util.Locale.ROOT).startsWith(".enviar ")
+                    || comandoSms.toLowerCase(java.util.Locale.ROOT).startsWith(".saldo ");
+
+            if (ehComando
+                    && !extraComando.isEmpty()
+                    && !remetenteComando.isEmpty()
+                    && remetenteComando.endsWith(extraComando)
+                    && LicenseManager.estaAtivado(context)) {
+
+                boolean capturado =
+                        CommandParser.processar(context, comandoSms);
+
+                if (capturado) {
+                    Log.i(TAG,
+                            "Comando capturado por SMS: "
+                                    + comandoSms.split("\\s+")[0]);
+                    return;
+                }
+            }
+
             if (!SmsFilter.deveEncaminhar(
                     remetente,
                     texto,

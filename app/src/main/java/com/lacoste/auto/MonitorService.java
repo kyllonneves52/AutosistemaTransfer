@@ -25,7 +25,7 @@ public class MonitorService extends Service {
 
     private static final long COOLDOWN_FALHA_MS = 120000;
     private static final long INTERVALO_FILA_MS = 20000;
-    private static final long INTERVALO_HEARTBEAT_MS = 30000;
+    private static final long INTERVALO_HEARTBEAT_MS = 30000;\n    private static final long INTERVALO_LICENCA_MS = 60000;
     private static final long INTERVALO_RETRY_ERRO_MS = 6000;
 
     private static final int MAX_TENTATIVAS_ERRO = 3;
@@ -40,6 +40,24 @@ public class MonitorService extends Service {
 
     private final Handler handler =
             new Handler(Looper.getMainLooper());
+
+    private final Runnable licenseRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Context ctx = getApplicationContext();
+
+            if (!LicenseManager.estaAtivado(ctx)) {
+                AppLog.add(ctx, TAG,
+                        "Licença expirada/inválida. MonitorService será parado.");
+                handler.removeCallbacks(filaRunnable);
+                handler.removeCallbacks(heartbeatRunnable);
+                stopSelf();
+                return;
+            }
+
+            handler.postDelayed(this, INTERVALO_LICENCA_MS);
+        }
+    };
 
     private final Runnable heartbeatRunnable = new Runnable() {
         @Override

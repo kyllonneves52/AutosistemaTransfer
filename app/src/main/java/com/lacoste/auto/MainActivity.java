@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
+import android.os.PowerManager;\nimport android.os.Handler;\nimport android.os.Looper;
 import android.provider.Settings;
 import android.text.InputType;
 import android.view.Gravity;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView sim1Restantes, sim2Restantes;
     private TextView androidIdView, aprovacaoView, acessibilidadeView;
     private TextView resultadoTransferencia, resultadoCredito;
-    private EditText urlView, tokenView;
+    private EditText urlView, tokenView;\n\n    private TextView licencaView;\n    private final Handler licenseHandler = new Handler(Looper.getMainLooper());\n    private final Runnable licenseCheckRunnable = new Runnable() {\n        @Override public void run() {\n            if (!LicenseManager.estaAtivado(MainActivity.this)) {\n                licenseHandler.removeCallbacks(this);\n                try {\n                    startActivity(new Intent(MainActivity.this, ActivationActivity.class));\n                    finish();\n                } catch (Exception ignored) {}\n                return;\n            }\n            if (licencaView != null) {\n                licencaView.setText("Licença: " + LicenseManager.tempoRestante(MainActivity.this));\n            }\n            licenseHandler.postDelayed(this, 60000L);\n        }\n    };
 
     private int dp(float v) {
         return (int) (v * getResources().getDisplayMetrics().density + 0.5f);
@@ -146,7 +146,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return;
         }
 
-        construirInterfaceNativa();
+        construirInterfaceNativa();\n        iniciarMonitorService();\n        licenseCheckRunnable.run();
     }
 
     private void construirInterfaceNativa() {
@@ -165,12 +165,12 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         subtitulo.setTextColor(0xFF8792A6);
         content.addView(subtitulo);
 
-        TextView licenca = text(
+        licencaView = text(
                 "Licença: " + LicenseManager.tempoRestante(this),
                 12
         );
-        licenca.setTextColor(0xFF8792A6);
-        content.addView(licenca);
+        licencaView.setTextColor(0xFF22C55E);
+        content.addView(licencaView);
 
         // Saldo / SIM
         LinearLayout saldo = card("Saldo e transferências");
@@ -407,7 +407,11 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         overlay.setOnClickListener(v -> abrirConfigOverlay());
         permissoes.addView(overlay);
 
-        content.addView(permissoes);
+        Button notificacoes =
+                button("Permitir leitura de notificações (.enviar / .saldo)");
+
+        notificacoes.setOnClickListener(v -> abrirConfigNotificacoes());
+        permissoes.addView(notificacoes);
 
         // Diagnóstico
         LinearLayout diagnostico = card("Diagnóstico");
@@ -429,6 +433,9 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
         diagnostico.addView(limpar);
         content.addView(diagnostico);
+
+        // Todas as permissões ficam no fim da interface.
+        content.addView(permissoes);
 
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
@@ -906,4 +913,4 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         }
     }
 
-}
+\n    @Override\n    protected void onDestroy() {\n        licenseHandler.removeCallbacks(licenseCheckRunnable);\n        super.onDestroy();\n    }\n}
