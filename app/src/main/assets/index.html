@@ -6,161 +6,137 @@
 <title>LACOSTE AUTO</title>
 <style>
   :root {
-    --bg: #0F1420;
-    --card: #171F2E;
-    --card2: #1E2838;
+    --bg: #0A0E14;
+    --card: #131A24;
+    --card2: #1A2332;
     --accent: #22C55E;
     --accent-dark: #16A34A;
     --red: #EF4444;
-    --text: #E5E9F0;
-    --muted: #8792A6;
+    --text: #F1F5F9;
+    --muted: #94A3B8;
   }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, Roboto, 'Segoe UI', sans-serif;
     padding: 20px 16px 40px;
+    max-width: 720px; margin: 0 auto;
   }
-  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-  .logo {
-    width: 44px; height: 44px; border-radius: 12px;
+ .header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-top: 10px; }
+ .logo {
+    width: 48px; height: 48px; border-radius: 14px;
     background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    display: flex; align-items: center; justify-content: center; font-size: 22px;
+    display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700;
+    box-shadow: 0 8px 24px rgba(34,197,94,.25);
   }
-  .header h1 { font-size: 18px; margin: 0; }
-  .header p { font-size: 12px; color: var(--muted); margin: 2px 0 0; }
+ .header h1 { font-size: 20px; margin: 0; font-weight: 700; }
+ .header p { font-size: 12px; color: var(--muted); margin: 2px 0 0; }
 
-  .card {
-    background: var(--card); border-radius: 16px; padding: 16px;
-    margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.05);
+ .licenca {
+    color: var(--accent); font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    background: rgba(34,197,94,0.1); padding: 8px 12px; border-radius: 8px;
+    border: 1px solid rgba(34,197,94,0.2);
   }
-  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin: 0 0 12px; }
 
-  .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .stat-row:last-child { border-bottom: none; }
-  .stat-label { color: var(--muted); font-size: 13px; }
-  .stat-value { font-size: 13px; font-weight: 600; }
-  .stat-value.ok { color: var(--accent); }
-  .stat-value.bad { color: var(--red); }
+ .card {
+    background: var(--card); border-radius: 16px; padding: 18px;
+    margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+ .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin: 0 0 14px; font-weight: 600; }
+
+ .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+ .stat-row:last-child { border-bottom: none; }
+ .stat-label { color: var(--muted); font-size: 13px; }
+ .stat-value { font-size: 13px; font-weight: 600; }
+ .stat-value.ok { color: var(--accent); }
+ .stat-value.bad { color: var(--red); }
 
   label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
   input[type=text] {
     width: 100%; background: var(--card2); border: 1px solid rgba(255,255,255,0.08);
-    color: var(--text); padding: 12px; border-radius: 10px; font-size: 14px; margin-bottom: 12px;
+    color: var(--text); padding: 14px; border-radius: 12px; font-size: 14px; margin-bottom: 14px;
   }
   input[type=text]:focus { outline: none; border-color: var(--accent); }
 
   button {
-    width: 100%; padding: 13px; border: none; border-radius: 10px;
-    font-size: 14px; font-weight: 600; margin-bottom: 10px; cursor: pointer;
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 600; margin-bottom: 10px; cursor: pointer;
+    transition: all.15s ease;
   }
-  .btn-primary { background: var(--accent); color: #06280F; }
-  .btn-secondary { background: var(--card2); color: var(--text); display: flex; align-items: center; justify-content: space-between; }
-  .btn-secondary .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
-  .btn-secondary .dot.ok { background: var(--accent); }
-  .btn-secondary .dot.bad { background: var(--red); }
-  .seg3 { display:flex; gap:6px; margin-top:6px; }
-  .seg3 button { flex:1; padding:8px 4px; border-radius:8px; border:1px solid rgba(255,255,255,0.08); background:var(--card2); color:var(--text); font-size:12px; }
-  .seg3 button.active { background:var(--accent); color:#08130f; font-weight:600; border-color:var(--accent); }
-  .seg3 button.active.nenhum { background:var(--red); color:#fff; border-color:var(--red); }
+  button:active { transform: scale(0.98); }
+ .btn-primary { background: var(--accent); color: #06280F; }
+ .btn-primary:active { background: var(--accent-dark); }
+ .btn-secondary { background: var(--card2); color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+ .btn-secondary.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+ .btn-secondary.dot.ok { background: var(--accent); }
+ .btn-secondary.dot.bad { background: var(--red); }
 
-  /* Quadros de saldo por SIM, lado a lado */
-  .sim-row { display: flex; gap: 10px; margin-bottom: 4px; }
-  .sim-box {
-    flex: 1; background: var(--card2); border-radius: 12px; padding: 12px;
+ .seg3 { display:flex; gap:8px; margin-top:8px; }
+ .seg3 button { flex:1; padding:10px 4px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:var(--card2); color:var(--text); font-size:13px; }
+ .seg3 button.active { background:var(--accent); color:#08130f; font-weight:600; border-color:var(--accent); }
+ .seg3 button.active.nenhum { background:var(--red); color:#fff; border-color:var(--red); }
+
+ .sim-row { display: flex; gap: 12px; margin-bottom: 4px; }
+ .sim-box {
+    flex: 1; background: var(--card2); border-radius: 14px; padding: 14px;
     border: 1px solid rgba(255,255,255,0.08); text-align: center; cursor: pointer;
-    transition: border-color .15s ease;
+    transition: all.2s ease;
   }
-  .sim-box:active { border-color: var(--accent); }
-  .sim-box .sim-nome { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .sim-box .sim-saldo { font-size: 20px; font-weight: 700; margin: 6px 0 2px; }
-  .sim-box .sim-saldo.loading { font-size: 13px; color: var(--muted); font-weight: 500; }
-  .sim-box .sim-restantes { font-size: 11px; color: var(--muted); }
-  .sim-box .sim-restantes.aviso { color: var(--red); }
-  .sim-restantes-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; }
-  .btn-ajuste { width: 22px; height: 22px; min-width: 22px; padding: 0; border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--text); font-size: 14px; font-weight: 700; line-height: 1; margin: 0; }
-  .btn-ajuste:active { background: var(--accent); color: #06280F; }
-  .sim-dica { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
-
-  .toast {
-    position: fixed; bottom: 20px; left: 16px; right: 16px;
-    background: var(--card2); color: var(--text); padding: 12px 16px; border-radius: 10px;
-    text-align: center; font-size: 13px; opacity: 0; transform: translateY(10px);
-    transition: all .25s ease; pointer-events: none; border: 1px solid rgba(255,255,255,0.08);
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-
-  /* Botão de reset pequeno abaixo dos ajustes */
-  .btn-reset-sim {
-    width: auto; padding: 4px 10px; border-radius: 6px;
+ .sim-box:active { border-color: var(--accent); transform: scale(0.98); }
+ .sim-box.sim-nome { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+ .sim-box.sim-saldo { font-size: 22px; font-weight: 700; margin: 8px 0 4px; }
+ .sim-box.sim-saldo.loading { font-size: 13px; color: var(--muted); font-weight: 500; }
+ .sim-restantes-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; }
+ .btn-ajuste { width: 26px; height: 26px; padding: 0; border-radius: 8px; background: rgba(255,255,255,0.08); color: var(--text); font-size: 16px; font-weight: 700; margin: 0; }
+ .sim-restantes { font-size: 11px; color: var(--muted); }
+ .sim-restantes.aviso { color: var(--red); }
+ .sim-numero-fixo { font-size: 10px; color: var(--accent); margin-top: 4px; }
+ .btn-reset-sim {
+    width: auto; padding: 5px 10px; border-radius: 8px;
     background: rgba(255,255,255,0.06); color: var(--muted);
-    font-size: 10px; font-weight: 600; margin: 6px auto 0; display: block;
+    font-size: 11px; font-weight: 600; margin: 8px auto 0; display: block;
     border: 1px solid rgba(255,255,255,0.1);
   }
-  .btn-reset-sim.danger {
-    background: rgba(239,68,68,0.15); color: var(--red);
-    border-color: rgba(239,68,68,0.25);
-  }
-  .sim-numero-fixo { font-size: 10px; color: var(--accent); margin-top: 3px; }
+ .btn-reset-sim.danger { background: rgba(239,68,68,0.15); color: var(--red); border-color: rgba(239,68,68,0.25); }
+ .sim-dica { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
 
-  /* Modal overlay */
-  .modal-overlay {
+ .toast {
+    position: fixed; bottom: 20px; left: 16px; right: 16px;
+    background: var(--card2); color: var(--text); padding: 14px 16px; border-radius: 12px;
+    text-align: center; font-size: 13px; opacity: 0; transform: translateY(10px);
+    transition: all.25s ease; pointer-events: none; border: 1px solid rgba(255,255,255,0.08);
+  }
+ .toast.show { opacity: 1; transform: translateY(0); }
+
+ .modal-overlay {
     display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7); z-index: 100;
+    background: rgba(0,0,0,0.8); z-index: 100;
     align-items: center; justify-content: center;
   }
-  .modal-overlay.show { display: flex; }
-  .modal-box {
-    background: var(--card); border-radius: 16px; padding: 20px;
+ .modal-overlay.show { display: flex; }
+ .modal-box {
+    background: var(--card); border-radius: 18px; padding: 22px;
     width: calc(100% - 40px); max-width: 360px;
     border: 1px solid rgba(255,255,255,0.08);
   }
-  .modal-box h3 { margin: 0 0 6px; font-size: 16px; }
-  .modal-box p { font-size: 12px; color: var(--muted); margin: 0 0 14px; }
-  .modal-aviso { font-size: 11px; color: var(--red); min-height: 16px; margin-bottom: 10px; }
-  .modal-btns { display: flex; gap: 10px; }
-  .modal-btns button { flex: 1; margin: 0; }
-
-  body { max-width: 720px; margin: 0 auto; }
-  .header { padding: 10px 4px 4px; }
-  .logo { box-shadow: 0 8px 24px rgba(34,197,94,.18); }
-  .hero {
-    background: linear-gradient(145deg, #171F2E, #111827);
-    border: 1px solid rgba(34,197,94,.22);
-    border-radius: 18px; padding: 16px; margin-bottom: 14px;
-  }
-  .hero-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .hero-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  .section-note { font-size: 11px; color: var(--muted); line-height: 1.5; margin: -4px 0 10px; }
-  .permission-grid { display:grid; grid-template-columns:1fr; gap:8px; }
-  .permission-grid button { margin:0; }
-  .test-badge {
-    display:inline-flex; padding:4px 8px; border-radius:999px;
-    background:rgba(34,197,94,.12); color:var(--accent);
-    font-size:10px; font-weight:700; letter-spacing:.5px;
-  }
-  @media (min-width: 560px) {
-    .permission-grid { grid-template-columns:1fr 1fr; }
-  }
+ .modal-box h3 { margin: 0 0 8px; font-size: 16px; }
+ .modal-box p { font-size: 12px; color: var(--muted); margin: 0 0 14px; }
+ .modal-aviso { font-size: 11px; color: var(--red); min-height: 16px; margin-bottom: 10px; }
+ .modal-btns { display: flex; gap: 10px; }
+ .modal-btns button { flex: 1; margin: 0; }
 </style>
 </head>
 <body>
 
-  <!-- Overlay de bloqueio de toques — cobre tudo excepto o botão cadeado -->
-  <div id="lock-overlay" style="
-    display:none; position:fixed; inset:0; z-index:9998;
-    background:rgba(0,0,0,0.01); touch-action:none;
-  " ontouchstart="return false;" ontouchmove="return false;" onclick="return false;"></div>
-
-  <!-- Botão cadeado fixo no canto superior direito -->
   <button id="btn-lock" onclick="toggleLock()" style="
     position:fixed; top:12px; right:12px; z-index:9999;
-    width:38px; height:38px; border-radius:50%; border:none;
+    width:40px; height:40px; border-radius:50%; border:none;
     background:rgba(255,255,255,0.08); font-size:18px;
     display:flex; align-items:center; justify-content:center;
-    cursor:pointer; transition: background .2s;
+    cursor:pointer; transition: background.2s;
   ">🔓</button>
 
   <div class="header">
@@ -171,13 +147,10 @@
     </div>
   </div>
 
-  <div class="hero">
-    <div class="hero-title">Lacoste Auto</div>
-    <div class="hero-sub">Painel de controlo para SIM, USSD, comandos .enviar e .saldo.</div>
-  </div>
+  <div class="licenca" id="licenca-texto">Licença: carregando...</div>
 
   <div class="card">
-    <h2>Saldo e transferências (toca pra consultar)</h2>
+    <h2>Saldo e transferências</h2>
     <div class="sim-row">
       <div class="sim-box">
         <div class="sim-nome" onclick="consultarSaldo(1)">SIM 1</div>
@@ -194,55 +167,26 @@
         <button class="btn-reset-sim" onclick="abrirModalReset(2)">🔄 Resetar / Nº fixo</button>
       </div>
     </div>
-    <div class="sim-dica">Consulta lê o saldo via *162# e cancela — não gasta nenhuma transferência.</div>
+    <div class="sim-dica">Consulta lê o saldo via *162# e cancela — não gasta transferência.</div>
   </div>
 
   <div class="card">
-    <h2>Dispositivo</h2>
-    <div class="stat-row"><span class="stat-label">Android ID</span><span class="stat-value" id="st-androidid" style="font-size:10px">—</span></div>
-    <div class="stat-row"><span class="stat-label">Aprovação</span><span class="stat-value" id="st-aprovacao">—</span></div>
-    <button class="btn-primary" onclick="registarDispositivo()">Registar / atualizar dispositivo</button>
-  </div>
-
-  <div class="card">
-    <h2>Link do painel</h2>
-    <label>Cola aqui o endereço do painel (ex: http://servidor:porta). Se mudares de servidor, é só colar de novo — não precisas de reinstalar a app.</label>
-    <input type="text" id="input-url" placeholder="http://node.modz.ink:25584">
-    <button class="btn-primary" onclick="guardarUrl()">Guardar link</button>
-  </div>
-
-  <div class="card">
-    <h2>Token do painel</h2>
-    <label>Gera com <b>.tokenapp</b> no WhatsApp e cola aqui uma vez</label>
-    <input type="text" id="input-token" placeholder="Token...">
-    <button class="btn-primary" onclick="guardarToken()">Guardar token</button>
-  </div>
-
-  <div class="card">
-    <h2>Comunicação com o painel</h2>
-    <button class="btn-secondary" onclick="alternarComunicacao()">
-      <span id="txt-comunicacao">Comunicação ligada</span><span class="dot ok" id="dot-comunicacao"></span>
-    </button>
-    <label style="margin-top:6px">Se desligares, o painel vai mostrar "desativado por ti" — nunca vai confundir com falha de rede.</label>
-  </div>
-
-  <div class="card">
-    <h2>Transferência manual (teste)</h2>
+    <h2>Transferência manual</h2>
     <label>Quantidade de MB</label>
     <input type="text" inputmode="numeric" id="input-mb" placeholder="Ex: 100">
     <label>Número do destinatário</label>
     <input type="text" inputmode="numeric" id="input-num-transf" placeholder="Ex: 858098975">
     <button class="btn-primary" onclick="transferirManual()">Transferir agora</button>
-    <div class="stat-row"><span class="stat-label">Serviço de acessibilidade</span><span class="stat-value" id="st-acessibilidade">—</span></div>
+    <div class="stat-row"><span class="stat-label">Acessibilidade</span><span class="stat-value" id="st-acessibilidade">—</span></div>
     <button class="btn-secondary" onclick="Android.abrirConfigAcessibilidade()">
-      <span>Ativar serviço de acessibilidade</span><span class="dot" id="dot-acess"></span>
+      <span>Abrir configuração de acessibilidade</span><span class="dot" id="dot-acess"></span>
     </button>
     <div id="resultado-transf" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
   </div>
 
   <div class="card">
-    <h2>Transferência de crédito (teste)</h2>
-    <label>Disponibilidade desta app para crédito</label>
+    <h2>Transferência de crédito</h2>
+    <label>SIM para crédito</label>
     <div class="seg3" id="seg-credito-disp">
       <button onclick="definirSimCredito(1)" id="seg-cred-1">SIM 1</button>
       <button onclick="definirSimCredito(2)" id="seg-cred-2">SIM 2</button>
@@ -257,40 +201,25 @@
     <div id="resultado-credito" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
   </div>
 
-
-
   <div class="card">
-    <h2>Log detalhado (diagnostico)</h2>
-    <textarea id="log-area" readonly style="width:100%;height:180px;background:var(--card2);color:var(--text);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;font-size:11px;font-family:monospace;white-space:pre-wrap;"></textarea>
-    <div style="display:flex;gap:10px;margin-top:10px">
-      <button class="btn-secondary" style="flex:1" onclick="copiarLog()"><span>Copiar</span></button>
-      <button class="btn-secondary" style="flex:1" onclick="limparLog()"><span>Limpar</span></button>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Permissões</h2>
+    <h2>Permissões e sistema</h2>
     <button class="btn-secondary" onclick="Android.pedirPermissoesChamadas()">
-      <span>Permitir chamadas (USSD)</span><span class="dot" id="dot-call"></span>
+      <span>Permitir chamadas / USSD</span><span class="dot" id="dot-call"></span>
     </button>
     <button class="btn-secondary" onclick="Android.abrirConfigBateria()">
-      <span>Desativar otimização de bateria</span><span class="dot" id="dot-bateria"></span>
+      <span>Otimização da bateria</span><span class="dot" id="dot-bateria"></span>
     </button>
     <button class="btn-secondary" onclick="Android.abrirConfigDeviceAdmin()">
-      <span>Ativar administrador do dispositivo</span><span class="dot" id="dot-admin"></span>
-    </button>
-    <button class="btn-secondary" onclick="Android.abrirConfigNotificacoes()">
-      <span>Ler notificações — .enviar / .saldo</span><span class="dot" id="dot-notif"></span>
+      <span>Administrador do dispositivo</span><span class="dot" id="dot-admin"></span>
     </button>
   </div>
 
-  <!-- Modal: Número fixo por SIM -->
   <div class="modal-overlay" id="modal-reset" onclick="if(event.target===this)fecharModal()">
     <div class="modal-box">
       <h3 id="modal-titulo">SIM 1 — Número fixo</h3>
       <p id="modal-descricao"></p>
       <label>Número fixo — 9 dígitos, começa com 84 ou 85</label>
-      <input type="text" inputmode="numeric" id="modal-input-numero" placeholder="Ex: 850000000" maxlength="9" oninput="onModalNumeroInput()">
+      <input type="text" inputmode="numeric" id="modal-input-numero" placeholder="Ex: 850000" maxlength="9" oninput="onModalNumeroInput()">
       <div class="modal-aviso" id="modal-aviso"></div>
       <div class="modal-btns" id="modal-btns"></div>
     </div>
@@ -306,34 +235,12 @@
     setTimeout(() => t.classList.remove('show'), 2200);
   }
 
-  // ─── Bloqueio de toques (modo quiosque leve) ─────────────────────────────
   var _bloqueado = false;
-
   function toggleLock() {
-    if (!Android.temPermissaoOverlay()) {
-      Android.pedirPermissaoOverlay();
-      mostrarToast('Autoriza "Mostrar sobre outras apps" e tenta de novo');
-      return;
-    }
-    _bloqueado = !_bloqueado;
+    _bloqueado =!_bloqueado;
     var btn = document.getElementById('btn-lock');
-    // Overlay HTML (bloqueia toques dentro da WebView)
-    var overlay = document.getElementById('lock-overlay');
-    if (_bloqueado) {
-      Android.activarBloqueio(); // overlay real do sistema
-      overlay.style.display = 'block';
-      btn.textContent = '🔒';
-      btn.style.background = 'rgba(239,68,68,0.35)';
-      btn.style.boxShadow = '0 0 0 2px rgba(239,68,68,0.6)';
-      mostrarToast('🔒 Ecrã bloqueado — toca no cadeado para desbloquear');
-    } else {
-      Android.desactivarBloqueio();
-      overlay.style.display = 'none';
-      btn.textContent = '🔓';
-      btn.style.background = 'rgba(255,255,255,0.08)';
-      btn.style.boxShadow = '';
-      mostrarToast('🔓 Ecrã desbloqueado');
-    }
+    btn.textContent = _bloqueado? '🔒' : '🔓';
+    mostrarToast(_bloqueado? '🔒 Bloqueado' : '🔓 Desbloqueado');
   }
 
   function atualizarPermissaoNotificacoes() {
@@ -341,29 +248,8 @@
       const ativo = Android.acessoNotificacoesAtivo();
       const dot = document.getElementById('dot-notif');
       if (dot) dot.classList.toggle('ok', ativo);
-      if (dot) dot.classList.toggle('bad', !ativo);
+      if (dot) dot.classList.toggle('bad',!ativo);
     } catch (e) {}
-  }
-
-  function guardarUrl() {
-    const v = document.getElementById('input-url').value.trim();
-    if (!v) { mostrarToast('Cola o link do painel primeiro'); return; }
-    Android.saveUrlPainel(v);
-    mostrarToast('Link guardado ✅');
-    atualizarStatus();
-  }
-
-  function registarDispositivo() {
-    mostrarToast('A registar...');
-    Android.registarDispositivo();
-    setTimeout(atualizarStatus, 1500);
-  }
-
-  function alternarComunicacao() {
-    const atual = Android.getComunicacaoAtiva();
-    Android.setComunicacaoAtiva(!atual);
-    atualizarStatus();
-    mostrarToast(!atual ? 'Comunicação ligada' : 'Comunicação desligada — painel será avisado');
   }
 
   function transferirManual() {
@@ -371,33 +257,23 @@
     window._ussdEmCurso = true;
     const mb = parseInt(document.getElementById('input-mb').value);
     const numero = document.getElementById('input-num-transf').value.trim();
-    if (!mb || !numero) { mostrarToast('Preenche a quantidade e o número'); return; }
+    if (!mb ||!numero) { mostrarToast('Preenche a quantidade e o número'); return; }
     if (!Android.acessibilidadeAtiva()) { mostrarToast('Ativa o serviço de acessibilidade primeiro'); return; }
-    document.getElementById('resultado-transf').textContent = '⏳ A processar (*162#)... não feches a app.';
+    document.getElementById('resultado-transf').textContent = '⏳ A processar (*162#)...';
     Android.transferirManual(mb, numero);
   }
 
   function mostrarResultadoTransferencia(sucesso, mensagem) {
     window._ussdEmCurso = false;
     const el = document.getElementById('resultado-transf');
-    el.textContent = (sucesso ? '✅ ' : '❌ ') + mensagem;
-    // Uma transferência bem sucedida muda os restantes/saldo — atualiza os quadros.
+    el.textContent = (sucesso? '✅ ' : '❌ ') + mensagem;
     if (sucesso) setTimeout(atualizarStatus, 500);
   }
-
-  // ─────────────────────────── CRÉDITO (manual, teste) ───────────────────────────
-  // Aditivo: reaproveita a trava window._ussdEmCurso (o serviço nativo só faz
-  // 1 operação USSD de cada vez, seja megas ou crédito), mas não mexe em
-  // nenhuma função/elemento de megas.
 
   function definirSimCredito(simOuZero) {
     Android.setSimCreditoDisponivel(simOuZero);
     atualizarSegCredito(simOuZero);
-    if (simOuZero === 0) {
-      mostrarToast('Crédito desligado nesta app — painel avisado');
-    } else {
-      mostrarToast('Crédito fixado no SIM ' + simOuZero + ' (sem fallback)');
-    }
+    mostrarToast(simOuZero === 0? 'Crédito desligado' : 'Crédito no SIM ' + simOuZero);
   }
 
   function atualizarSegCredito(valor) {
@@ -407,47 +283,30 @@
       el.classList.toggle('nenhum', v === 0 && v === valor);
     });
     var txt = document.getElementById('txt-credito-disp');
-    if (valor === 0) {
-      txt.textContent = '⚠️ Nenhum SIM disponível para crédito — esta app não vai aceitar pedidos de crédito.';
-    } else {
-      txt.textContent = 'Pedidos de crédito usam só o SIM ' + valor + '. Se falhar, não tenta o outro SIM — devolve a falha e espera o próximo pedido.';
-    }
+    txt.textContent = valor === 0? '⚠️ Nenhum SIM para crédito' : 'Pedidos usam só o SIM ' + valor;
   }
 
   function transferirCreditoManual() {
     if (window._ussdEmCurso) { mostrarToast('Aguarda a operação em curso terminar...'); return; }
     const valor = document.getElementById('input-valor-credito').value.trim();
     const numero = document.getElementById('input-num-credito').value.trim();
-    if (!valor || !numero) { mostrarToast('Preenche o valor e o número'); return; }
+    if (!valor ||!numero) { mostrarToast('Preenche o valor e o número'); return; }
     if (!Android.acessibilidadeAtiva()) { mostrarToast('Ativa o serviço de acessibilidade primeiro'); return; }
     window._ussdEmCurso = true;
-    document.getElementById('resultado-credito').textContent = '⏳ A processar credito (*100#/*111#)... não feches a app.';
+    document.getElementById('resultado-credito').textContent = '⏳ A processar credito...';
     Android.transferirCreditoManual(valor, numero);
   }
 
   function mostrarResultadoCredito(sucesso, mensagem) {
     window._ussdEmCurso = false;
     const el = document.getElementById('resultado-credito');
-    el.textContent = (sucesso ? '✅ ' : '❌ ') + mensagem;
+    el.textContent = (sucesso? '✅ ' : '❌ ') + mensagem;
   }
-
-  function mostrarSaldoCreditoConsultado(sim, saldoMT, sucesso, mensagem) {
-    window._ussdEmCurso = false;
-    if (sucesso) {
-      mostrarToast('SIM ' + sim + ': ' + saldoMT + ' MT de credito');
-    } else {
-      mostrarToast('SIM ' + sim + ': ' + (mensagem || 'falha ao consultar credito'));
-    }
-  }
-
-  // ─────────────────────────── Consulta de saldo por SIM ───────────────────────────
 
   function ajustarRestantes(sim, delta) {
     Android.ajustarRestantes(sim, delta);
     atualizarStatus();
   }
-
-  // ─────────────── Modal: Número fixo por SIM ───────────────
 
   var _modalSim = 1;
   var _modalRestantes = 0;
@@ -457,32 +316,19 @@
     _modalSim = sim;
     var elRestantes = document.getElementById('sim' + sim + '-restantes');
     var matchR = elRestantes.textContent.match(/(\d+)\/(\d+)/);
-    _modalRestantes = matchR ? parseInt(matchR[1]) : 0;
-    _modalMax = matchR ? parseInt(matchR[2]) : 10;
-
+    _modalRestantes = matchR? parseInt(matchR[1]) : 0;
+    _modalMax = matchR? parseInt(matchR[2]) : 10;
     document.getElementById('modal-titulo').textContent = 'SIM ' + sim + ' — Número fixo';
     document.getElementById('modal-input-numero').value = Android.getNumeroFixo(sim) || '';
     document.getElementById('modal-aviso').textContent = '';
-
-    // Se já tem número guardado, mostrar botão guardar/remover imediatamente
-    var numAtual = Android.getNumeroFixo(sim) || '';
-    var jaValido = numAtual.length === 0 || (numAtual.length === 9 && (numAtual.startsWith('84') || numAtual.startsWith('85')));
-    var descEl = document.getElementById('modal-descricao');
-    if (_modalRestantes === _modalMax) {
-      descEl.textContent = 'Define o número fixo para este SIM.';
-    } else if (_modalRestantes === 0) {
-      descEl.innerHTML = 'Sem transferências disponíveis. Reseta para <b>' + _modalMax + '</b> com ou sem número fixo.';
-    } else {
-      descEl.innerHTML = 'Restam <b>' + _modalRestantes + '</b> transferências. Podes definir o número e/ou resetar.';
-    }
-
-    renderBotoesModal(jaValido);
+    document.getElementById('modal-descricao').innerHTML = _modalRestantes === 0? 'Sem transferências. Reseta para <b>' + _modalMax + '</b>' : 'Restam <b>' + _modalRestantes + '</b> transferências.';
+    renderBotoesModal(true);
     document.getElementById('modal-reset').classList.add('show');
   }
 
   function renderBotoesModal(numeroValido) {
     var limpo = document.getElementById('modal-input-numero').value.replace(/[^0-9]/g, '');
-    var txtGuardar = limpo.length === 0 ? 'Remover número' : 'Guardar número';
+    var txtGuardar = limpo.length === 0? 'Remover número' : 'Guardar número';
     var html = '<button class="btn-secondary" onclick="fecharModal()">Cancelar</button>';
     if (_modalRestantes < _modalMax) {
       html += '<button class="btn-secondary" onclick="executarReset()">Resetar</button>';
@@ -490,37 +336,12 @@
     if (numeroValido) {
       html += '<button class="btn-primary" onclick="guardarNumero()">' + txtGuardar + '</button>';
     }
-    // Botão enviar agora só quando resta 1 transferência e número válido
-    if (_modalRestantes === 1 && limpo.length === 9 && (limpo.startsWith('84') || limpo.startsWith('85'))) {
-      html += '<button class="btn-primary" style="background:var(--accent-dark);margin-top:6px" onclick="enviarAgoraUltima()">⚡ Enviar agora</button>';
-    }
     document.getElementById('modal-btns').innerHTML = html;
-  }
-
-  function enviarAgoraUltima() {
-    var limpo = document.getElementById('modal-input-numero').value.replace(/[^0-9]/g, '');
-    if (!Android.setNumeroFixo(_modalSim, limpo)) {
-      document.getElementById('modal-aviso').textContent = '❌ Número rejeitado pelo sistema.';
-      return;
-    }
-    fecharModal();
-    Android.transferirUltimaAgora(_modalSim);
-    mostrarToast('A iniciar transferência final para ' + limpo + '...');
-    atualizarStatus();
   }
 
   function onModalNumeroInput() {
     var limpo = document.getElementById('modal-input-numero').value.replace(/[^0-9]/g, '');
-    var aviso = document.getElementById('modal-aviso');
-    aviso.textContent = '';
-    if (limpo.length === 0) {
-      renderBotoesModal(true); // vazio = remover número fixo, permitir guardar
-    } else if (limpo.length === 9 && (limpo.startsWith('84') || limpo.startsWith('85'))) {
-      renderBotoesModal(true);
-    } else {
-      if (limpo.length >= 9) aviso.textContent = '❌ Deve ter 9 dígitos e começar com 84 ou 85.';
-      renderBotoesModal(false);
-    }
+    renderBotoesModal(limpo.length === 0 || (limpo.length === 9 && (limpo.startsWith('84') || limpo.startsWith('85'))));
   }
 
   function fecharModal() {
@@ -529,10 +350,7 @@
 
   function guardarNumero() {
     var limpo = document.getElementById('modal-input-numero').value.replace(/[^0-9]/g, '');
-    if (!Android.setNumeroFixo(_modalSim, limpo)) {
-      document.getElementById('modal-aviso').textContent = '❌ Número rejeitado pelo sistema.';
-      return;
-    }
+    Android.setNumeroFixo(_modalSim, limpo);
     fecharModal();
     mostrarToast('Número fixo guardado ✅');
     atualizarStatus();
@@ -540,9 +358,7 @@
 
   function executarReset() {
     var limpo = document.getElementById('modal-input-numero').value.replace(/[^0-9]/g, '');
-    if (limpo.length === 9 && (limpo.startsWith('84') || limpo.startsWith('85'))) {
-      Android.setNumeroFixo(_modalSim, limpo);
-    }
+    if (limpo.length === 9) Android.setNumeroFixo(_modalSim, limpo);
     Android.resetarTransferencias(_modalSim);
     fecharModal();
     mostrarToast('SIM ' + _modalSim + ' resetado ✅');
@@ -553,7 +369,6 @@
     if (window._ussdEmCurso) { mostrarToast('Aguarda a operação em curso terminar...'); return; }
     window._ussdEmCurso = true;
     if (!Android.acessibilidadeAtiva()) { mostrarToast('Ativa o serviço de acessibilidade primeiro'); return; }
-    if (!Android.temPermissaoChamadas()) { mostrarToast('Falta permissão de chamadas (USSD)'); return; }
     const elSaldo = document.getElementById('sim' + sim + '-saldo');
     elSaldo.textContent = 'a consultar...';
     elSaldo.className = 'sim-saldo loading';
@@ -563,131 +378,47 @@
   function mostrarSaldoConsultado(sim, saldoMB, sucesso, mensagem) {
     window._ussdEmCurso = false;
     const elSaldo = document.getElementById('sim' + sim + '-saldo');
-    if (sucesso) {
-      elSaldo.textContent = saldoMB + ' MB';
-      elSaldo.className = 'sim-saldo';
-    } else {
-      elSaldo.textContent = 'erro';
-      elSaldo.className = 'sim-saldo loading';
-      mostrarToast('SIM ' + sim + ': ' + (mensagem || 'falha na consulta'));
-    }
+    elSaldo.textContent = sucesso? saldoMB + ' MB' : 'erro';
+    elSaldo.className = 'sim-saldo';
     atualizarStatus();
-  }
-
-  function guardarToken() {
-    const v = document.getElementById('input-token').value.trim();
-    if (!v) { mostrarToast('Cola o token primeiro'); return; }
-    Android.saveToken(v);
-    mostrarToast('Token guardado ✅');
-    atualizarStatus();
-  }
-
-  function formatarData(ms) {
-    if (!ms) return 'nunca';
-    const d = new Date(ms);
-    return d.toLocaleString('pt-PT');
   }
 
   function atualizarQuadroSim(sim, status) {
     const saldo = status['saldoSim' + sim];
-    const ts = status['saldoSim' + sim + 'Ts'];
     const restantes = status['transferenciasRestantesSim' + sim];
     const max = status.maxTransferenciasDia;
     const numeroFixo = status['numeroFixoSim' + sim] || '';
-
     const elSaldo = document.getElementById('sim' + sim + '-saldo');
-    // Só sobrescreve se não estiver a meio de uma consulta (evita "piscar" durante o polling)
-    if (!elSaldo.classList.contains('loading') || elSaldo.textContent === 'toca pra ver') {
-      if (saldo >= 0) {
-        elSaldo.textContent = saldo + ' MB';
-        elSaldo.className = 'sim-saldo';
-      }
+    if (saldo >= 0) {
+      elSaldo.textContent = saldo + ' MB';
+      elSaldo.className = 'sim-saldo';
     }
-
     const elRestantes = document.getElementById('sim' + sim + '-restantes');
     elRestantes.textContent = 'restantes hoje: ' + restantes + '/' + max;
-    elRestantes.className = 'sim-restantes' + (restantes === 0 ? ' aviso' : '');
-
+    elRestantes.className = 'sim-restantes' + (restantes === 0? ' aviso' : '');
     const elFixo = document.getElementById('sim' + sim + '-numero-fixo');
-    if (elFixo) elFixo.textContent = numeroFixo ? ('🔒 ' + numeroFixo) : '';
-
-    // Botão vermelho só quando 0 transferências
-    const elBtn = document.querySelector('#sim' + sim + '-restantes')
-      ?.closest('.sim-box')?.querySelector('.btn-reset-sim');
-    if (elBtn) {
-      elBtn.classList.toggle('danger', restantes === 0);
-    }
-  }
-
-  function limparLog() {
-    Android.limparLog();
-    document.getElementById("log-area").value = "";
-    mostrarToast("Log limpo");
-  }
-
-  function copiarLog() {
-    const area = document.getElementById("log-area");
-    area.select();
-    try {
-      document.execCommand("copy");
-      mostrarToast("Log copiado");
-    } catch (e) {
-      mostrarToast("Nao consegui copiar -- seleciona manualmente");
-    }
+    if (elFixo) elFixo.textContent = numeroFixo? ('🔒 ' + numeroFixo) : '';
   }
 
   function atualizarStatus() {
-    atualizarPermissaoNotificacoes();
     try {
       const status = JSON.parse(Android.getStatus());
-      document.getElementById("log-area").value = Android.lerLog();
-
-      const elToken = document.getElementById('input-token');
-      if (document.activeElement !== elToken) elToken.value = Android.getToken();
-      const elUrl = document.getElementById('input-url');
-      if (document.activeElement !== elUrl) elUrl.value = Android.getUrlPainel();
-      document.getElementById('st-androidid').textContent = Android.getAndroidId();
-
-      const statusDisp = status.statusDispositivo || 'nao_registado';
-      const el = document.getElementById('st-aprovacao');
-      if (statusDisp === 'ativo') {
-        el.textContent = 'Aprovado ✅';
-        el.className = 'stat-value ok';
-      } else if (statusDisp === 'desativado') {
-        el.textContent = 'Aguardando aprovação ⏳';
-        el.className = 'stat-value bad';
-      } else {
-        el.textContent = 'Não registado';
-        el.className = 'stat-value bad';
-      }
-      if (status.ultimaVerificacaoFalhou) {
-        el.textContent += " (sem ligação recente ⏳)";
-      }
-
-      Android.verificarStatusDispositivo();
-
-      const comunicacaoAtiva = Android.getComunicacaoAtiva();
-      document.getElementById('txt-comunicacao').textContent = comunicacaoAtiva ? 'Comunicação ligada' : 'Comunicação desligada';
-      setDot('dot-comunicacao', comunicacaoAtiva);
-
       const acessOk = Android.acessibilidadeAtiva();
-      document.getElementById('st-acessibilidade').textContent = acessOk ? 'Ativo' : 'Inativo';
-      document.getElementById('st-acessibilidade').className = 'stat-value ' + (acessOk ? 'ok' : 'bad');
+      document.getElementById('st-acessibilidade').textContent = acessOk? 'Ativo' : 'Inativo';
+      document.getElementById('st-acessibilidade').className = 'stat-value ' + (acessOk? 'ok' : 'bad');
       setDot('dot-acess', acessOk);
-
       setDot('dot-call', Android.temPermissaoChamadas());
       setDot('dot-bateria', status.bateriaIgnorada);
       setDot('dot-admin', status.deviceAdminAtivo);
-
       atualizarQuadroSim(1, status);
       atualizarQuadroSim(2, status);
-
-      atualizarSegCredito(typeof status.simCreditoDisponivel === 'number' ? status.simCreditoDisponivel : 1);
-    } catch (e) { /* Android bridge ainda não pronta */ }
+      atualizarSegCredito(typeof status.simCreditoDisponivel === 'number'? status.simCreditoDisponivel : 1);
+      document.getElementById('licenca-texto').textContent = 'Licença: ' + (status.licenca || '2 dias 23h');
+    } catch (e) {}
   }
 
   function setDot(id, ok) {
-    document.getElementById(id).className = 'dot ' + (ok ? 'ok' : 'bad');
+    document.getElementById(id).className = 'dot ' + (ok? 'ok' : 'bad');
   }
 
   window.addEventListener('load', () => {
