@@ -18,12 +18,12 @@ public class LicenseManager {
     }
 
     public static boolean estaAtivado(Context context) {
-        if (!LicenseStorage.existe()) {
+        if (!LicenseStorage.existe(context)) { // <- ADICIONEI context
             return false;
         }
 
         try {
-            String dados = LicenseStorage.ler();
+            String dados = LicenseStorage.ler(context); // <- ADICIONEI context
             if (dados == null) return false;
 
             String buildAtual =
@@ -73,10 +73,10 @@ public class LicenseManager {
             }
 
             // Impede reutilização da mesma chave neste dispositivo.
-            if (LicenseStorage.existe()) {
-                String dados = LicenseStorage.ler();
+            if (LicenseStorage.existe(context)) { // <- ADICIONEI context
+                String dados = LicenseStorage.ler(context); // <- ADICIONEI context
 
-                if (dados != null) {
+                if (dados!= null) {
                     String chaveSalva = pegar(dados, "CHAVE");
 
                     if (!chaveSalva.isEmpty()
@@ -91,7 +91,7 @@ public class LicenseManager {
 
             String[] partes = chave.split("-");
 
-            if (partes.length != 4) {
+            if (partes.length!= 4) {
                 ultimoMotivo = "Formato de chave inválido.";
                 return false;
             }
@@ -133,7 +133,7 @@ public class LicenseManager {
                     "DATA_INICIO=" + inicio + "\n" +
                     "DATA_FINAL=" + finalizacao;
 
-            LicenseStorage.salvar(dados);
+            LicenseStorage.salvar(context, dados); // <- ADICIONEI context
 
             ultimoMotivo = "Licença ativada.";
             AppLog.add(context, "LicenseManager",
@@ -150,7 +150,7 @@ public class LicenseManager {
 
     public static long millisRestantes(Context context) {
         try {
-            String dados = LicenseStorage.ler();
+            String dados = LicenseStorage.ler(context); // <- ADICIONEI context
             if (dados == null) return 0L;
             long fim = Long.parseLong(pegar(dados, "DATA_FINAL"));
             return Math.max(0L, fim - System.currentTimeMillis());
@@ -161,7 +161,7 @@ public class LicenseManager {
 
     public static String tempoRestante(Context context) {
         try {
-            String dados = LicenseStorage.ler();
+            String dados = LicenseStorage.ler(context); // <- ADICIONEI context
             if (dados == null) return "ERRO";
 
             long fim =

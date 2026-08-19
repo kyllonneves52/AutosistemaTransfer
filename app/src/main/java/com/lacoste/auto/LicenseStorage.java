@@ -1,49 +1,45 @@
 package com.lacoste.auto;
 
-import android.os.Environment;
+import android.content.Context;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class LicenseStorage {
 
-    private static File getArquivo() {
-        File arquivo = new File(
-                Environment.getExternalStorageDirectory(),
-                "Android/license.sys"
-        );
+    private static final String PASTA = "license";
+    private static final String ARQUIVO = "license.sys";
 
-        File pasta = arquivo.getParentFile();
-
-        if (pasta != null && !pasta.exists()) {
-            pasta.mkdirs(); // precisa disso
+    private static File getArquivo(Context ctx) {
+        File pasta = new File(ctx.getFilesDir(), PASTA);
+        if (!pasta.exists()) {
+            pasta.mkdirs(); // cria /data/data/com.lacoste.auto/files/license/
         }
-
-        return arquivo;
+        return new File(pasta, ARQUIVO);
     }
 
-    public static boolean existe() {
-        return getArquivo().exists();
+    public static boolean existe(Context ctx) {
+        return getArquivo(ctx).exists();
     }
 
-    public static void salvar(String dados) {
+    public static void salvar(Context ctx, String dados) {
         try {
-            FileWriter fw = new FileWriter(getArquivo(), false);
+            FileOutputStream fos = new FileOutputStream(getArquivo(ctx), false);
             try {
-                fw.write(dados);
+                fos.write(dados.getBytes(StandardCharsets.UTF_8));
             } finally {
-                fw.close();
+                fos.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            AppLog.add(null, "LicenseStorage", "Erro salvar: " + e.getMessage()); // adiciona isso pra debug
+            AppLog.add(ctx, "LicenseStorage", "Erro salvar: " + e.getMessage());
         }
     }
 
-    public static String ler() {
+    public static String ler(Context ctx) {
         try {
-            File f = getArquivo();
+            File f = getArquivo(ctx);
             if (!f.exists()) return null;
 
             FileInputStream fis = new FileInputStream(f);
@@ -58,7 +54,7 @@ public class LicenseStorage {
             return new String(dados, StandardCharsets.UTF_8);
 
         } catch (Exception e) {
-            AppLog.add(null, "LicenseStorage", "Erro ler: " + e.getMessage()); // adiciona isso pra debug
+            AppLog.add(ctx, "LicenseStorage", "Erro ler: " + e.getMessage());
             return null;
         }
     }
