@@ -17,7 +17,7 @@ public class LicenseStorage {
         File pasta = arquivo.getParentFile();
 
         if (pasta != null && !pasta.exists()) {
-            pasta.mkdirs();
+            pasta.mkdirs(); // precisa disso
         }
 
         return arquivo;
@@ -30,22 +30,20 @@ public class LicenseStorage {
     public static void salvar(String dados) {
         try {
             FileWriter fw = new FileWriter(getArquivo(), false);
-
             try {
                 fw.write(dados);
             } finally {
                 fw.close();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
+            AppLog.add(null, "LicenseStorage", "Erro salvar: " + e.getMessage()); // adiciona isso pra debug
         }
     }
 
     public static String ler() {
         try {
             File f = getArquivo();
-
             if (!f.exists()) return null;
 
             FileInputStream fis = new FileInputStream(f);
@@ -60,6 +58,7 @@ public class LicenseStorage {
             return new String(dados, StandardCharsets.UTF_8);
 
         } catch (Exception e) {
+            AppLog.add(null, "LicenseStorage", "Erro ler: " + e.getMessage()); // adiciona isso pra debug
             return null;
         }
     }

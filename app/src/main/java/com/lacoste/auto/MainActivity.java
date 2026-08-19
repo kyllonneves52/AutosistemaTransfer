@@ -33,6 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQ_PERMISSOES = 501;
+    private static final int REQ_STORAGE = 100;
 
     private TextView sim1Saldo, sim2Saldo;
     private TextView sim1Restantes, sim2Restantes;
@@ -135,20 +136,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-              != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-            }
-        }
+        pedirPermissoesStorage(); // <-- PEDIR STORAGE PRA TODAS VERSÕES
 
         if (!LicenseManager.estaAtivado(this)) {
             startActivity(new Intent(this, ActivationActivity.class));
@@ -158,7 +146,50 @@ public class MainActivity extends AppCompatActivity {
 
         construirInterfaceNativa();
         iniciarMonitorService();
-        licenseCheckRunnable.run();
+        licenseHandler.post(licenseCheckRunnable);
+    }
+
+    // NOVO METODO: Pede permissão de storage pra Android 6 até 14
+    private void pedirPermissoesStorage() {
+        if (Build.VERSION.SDK_INT >= 33) { // Android 13 e 14 - Honor
+            ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_AUDIO
+            }, REQ_STORAGE);
+
+            // Pede "Todos os arquivos" pra poder ler.m3u em qualquer pasta
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            }
+
+        } else if (Build.VERSION.SDK_INT >= 30) { // Android 11 e 12 - Sylo
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            }
+
+        } else { // Android 6 a 10
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                   != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        }, REQ_STORAGE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_STORAGE) {
+            Toast.makeText(this, "Permissões de arquivos atualizadas", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void construirInterfaceNativa() {

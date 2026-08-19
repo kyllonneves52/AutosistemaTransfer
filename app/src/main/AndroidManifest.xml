@@ -23,12 +23,18 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
 
-    <!-- PERMISSÕES DE STORAGE -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <!-- PERMISSÕES DE STORAGE - FUNCIONA EM TODAS VERSÕES -->
+    <!-- Android 6 a 12 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" tools:ignore="ScopedStorage"/>
+    
+    <!-- Android 13 e 14 - Ler mídia -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    
+    <!-- Android 11+ - Acessar todos arquivos. Pra ler .m3u em qualquer pasta -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage"/>
 
     <permission
         android:name="com.lacoste.auto.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -59,6 +65,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Resto igual... -->
         <receiver
             android:name="com.lacoste.auto.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS"
