@@ -45,7 +45,7 @@ public class NotificationForwarderService extends NotificationListenerService {
                 }
 
                 // Se não for comando, continua sendo pagamento
-                String remetente = (titulo == null? "" : titulo) + " + pacote;
+                String remetente = (titulo == null ? "" : titulo) + " " + pacote;
                 String numeroExtra = Prefs.getNumeroExtra(getApplicationContext());
 
                 if (SmsFilter.deveEncaminhar(remetente, mensagem, numeroExtra)) {
