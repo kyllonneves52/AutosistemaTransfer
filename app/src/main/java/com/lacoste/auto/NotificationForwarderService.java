@@ -1,124 +1,61 @@
 package com.lacoste.auto;
 
-import android.app.Notification;
-import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-public class NotificationForwarderService
-        extends NotificationListenerService {
+public class NotificationForwarderService extends NotificationListenerService {
 
-    private static final String TAG =
-            "AutosistemaNotifService";
+    private static final String TAG = "AutosistemaNotifService";
 
     @Override
-    public void onNotificationPosted(
-            StatusBarNotification sbn) {
+    public void onNotificationPosted(StatusBarNotification sbn) {
 
-        if (sbn == null) {
-            return;
-        }
+        if (sbn == null) return;
 
         try {
+            String pacote = sbn.getPackageName();
 
-            Notification n = sbn.getNotification();
+            if(pacote.equals("com.whatsapp") || pacote.equals("com.whatsapp.w4b")){
 
-            if (n == null) {
-                return;
-            }
+                String titulo = sbn.getNotification().extras.getString("android.title");
+                String texto = sbn.getNotification().extras.getString("android.text");
+                String bigText = sbn.getNotification().extras.getString("android.bigText");
 
-            Bundle extras = n.extras;
+                String mensagem = bigText!= null? bigText : texto;
+                if(mensagem == null) mensagem = "";
 
-            if (extras == null) {
-                return;
-            }
+                // Tira "Nome: " se vier de grupo
+                if (mensagem.contains(": ")) {
+                    mensagem = mensagem.split(": ", 2)[1];
+                }
 
-            CharSequence tituloCs =
-                    extras.getCharSequence("android.title");
+                mensagem = mensagem.trim();
+                String mensagemLower = mensagem.toLowerCase();
 
-            CharSequence textoCs =
-                    extras.getCharSequence("android.text");
+                // Só dispara se começar com.enviar ou.saldo
+                if(mensagemLower.startsWith(".enviar") || mensagemLower.startsWith(".saldo")){
+                    Log.i(TAG, "Msg recebida: " + mensagem);
+                    if (LicenseManager.estaAtivado(this)) {
+                        WhatsAppCommandService.processarMensagem(this, mensagem);
+                    } else {
+                        Log.w(TAG, "Comando ignorado: licença expirada.");
+                    }
+                    return; // já capturou
+                }
 
-            CharSequence bigTextCs =
-                    extras.getCharSequence("android.bigText");
+                // Se não for comando, continua sendo pagamento
+                String remetente = (titulo == null? "" : titulo) + " + pacote;
+                String numeroExtra = Prefs.getNumeroExtra(getApplicationContext());
 
-            String titulo =
-                    tituloCs == null
-                            ? ""
-                            : tituloCs.toString();
-
-            String texto;
-
-            if (bigTextCs != null) {
-                texto = bigTextCs.toString();
-            } else if (textoCs != null) {
-                texto = textoCs.toString();
-            } else {
-                texto = "";
-            }
-
-            if (texto.trim().isEmpty()) {
-                return;
-            }
-
-            // Sistema de captação de comandos do auto1, adaptado para o Auto.
-// Agora o comando é.enviar <MB> <número> e.saldo <MT> <número>.
-String comandoLower = texto.trim().toLowerCase();
-
-if (isWhatsApp(sbn.getPackageName())
-        && (comandoLower.startsWith(".enviar") || comandoLower.startsWith(".saldo"))) {
-
-    if (LicenseManager.estaAtivado(getApplicationContext())) {
-        boolean capturado =
-                CommandParser.processar(
-                        getApplicationContext(),
-                        texto
-                );
-
-        if (capturado) {
-            Log.i(TAG,
-                    "Comando capturado da notificação: " + comandoLower.split(" ")[0]);
-            return;
-        }
-    } else {
-        Log.w(TAG,
-                "Comando ignorado: licença expirada.");
-    }
-}
-            String remetente =
-                    titulo + " " + sbn.getPackageName();
-
-            String numeroExtra =
-                    Prefs.getNumeroExtra(
-                            getApplicationContext()
-                    );
-
-            if (SmsFilter.deveEncaminhar(
-                    remetente,
-                    texto,
-                    numeroExtra)) {
-
-                Log.i(TAG,
-                        "Notificação de pagamento detetada — a enviar ao painel.");
-
-                ApiClient.enviarParaPainel(
-                        getApplicationContext(),
-                        texto
-                );
+                if (SmsFilter.deveEncaminhar(remetente, mensagem, numeroExtra)) {
+                    Log.i(TAG, "Notificação de pagamento detetada — a enviar ao painel.");
+                    ApiClient.enviarParaPainel(getApplicationContext(), mensagem);
+                }
             }
 
         } catch (Exception e) {
-
-            Log.e(TAG,
-                    "Erro a processar notificação",
-                    e);
+            Log.e(TAG, "Erro a processar notificação", e);
         }
-    }
-
-
-    private boolean isWhatsApp(String pacote) {
-        return "com.whatsapp".equals(pacote)
-                || "com.whatsapp.w4b".equals(pacote);
     }
 }

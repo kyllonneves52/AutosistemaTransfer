@@ -6,7 +6,7 @@ import java.util.Locale;
 public class LicenseManager {
 
     // Mantido igual ao sistema do auto1.
-    private static final String BUILD_PERMITIDO = "HONORGFY-L32";
+    private static final String BUILD_PERMITIDO = "SP1A.210812.017";
     private static final String ID_LICENCA = "DF7A2792";
     private static final int DIAS_PLANO = 5;
     private static final String CODIGO = "AB96";
