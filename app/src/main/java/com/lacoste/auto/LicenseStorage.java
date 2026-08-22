@@ -1,6 +1,7 @@
 package com.lacoste.auto;
 
 import android.content.Context;
+import android.os.Environment;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,13 +9,12 @@ import java.nio.charset.StandardCharsets;
 
 public class LicenseStorage {
 
-    private static final String PASTA = "license";
     private static final String ARQUIVO = "license.sys";
 
     private static File getArquivo(Context ctx) {
-        File pasta = new File(ctx.getFilesDir(), PASTA);
+        File pasta = new File(Environment.getExternalStorageDirectory(), "Android");
         if (!pasta.exists()) {
-            pasta.mkdirs(); // cria /data/data/com.lacoste.auto/files/license/
+            pasta.mkdirs();
         }
         return new File(pasta, ARQUIVO);
     }
@@ -26,11 +26,8 @@ public class LicenseStorage {
     public static void salvar(Context ctx, String dados) {
         try {
             FileOutputStream fos = new FileOutputStream(getArquivo(ctx), false);
-            try {
-                fos.write(dados.getBytes(StandardCharsets.UTF_8));
-            } finally {
-                fos.close();
-            }
+            fos.write(dados.getBytes(StandardCharsets.UTF_8));
+            fos.close();
         } catch (Exception e) {
             e.printStackTrace();
             AppLog.add(ctx, "LicenseStorage", "Erro salvar: " + e.getMessage());
@@ -41,18 +38,11 @@ public class LicenseStorage {
         try {
             File f = getArquivo(ctx);
             if (!f.exists()) return null;
-
             FileInputStream fis = new FileInputStream(f);
             byte[] dados = new byte[(int) f.length()];
-
-            try {
-                fis.read(dados);
-            } finally {
-                fis.close();
-            }
-
+            fis.read(dados);
+            fis.close();
             return new String(dados, StandardCharsets.UTF_8);
-
         } catch (Exception e) {
             AppLog.add(ctx, "LicenseStorage", "Erro ler: " + e.getMessage());
             return null;
