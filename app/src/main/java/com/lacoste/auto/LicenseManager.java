@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public class LicenseManager {
 
-    private static final String BUILD_PERMITIDO = "TP1A.220624.014";
+    private static final String BUILD_PERMITIDO = "AP3A.240905.015.A2";
     private static final String ID_LICENCA = "DF7A2792";
     private static final int DIAS_PLANO = 5;
     private static final String CODIGO = "AB96";
